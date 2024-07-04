@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 218 218">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x="113" y="57" width="8" height="8"/>
+  <polygon class="cls-1" points="105 145 97 145 97 153 105 153 105 161 105 169 113 169 113 161 113 153 121 153 121 145 113 145 105 145"/>
+  <polygon class="cls-1" points="121 105 121 97 113 97 113 105 113 113 121 113 121 121 113 121 113 113 105 113 105 121 97 121 97 129 97 137 105 137 105 129 113 129 113 137 121 137 121 129 129 129 129 121 129 113 137 113 137 105 129 105 121 105"/>
+  <polygon class="cls-1" points="121 169 129 169 129 161 137 161 137 153 129 153 121 153 121 161 121 169"/>
+  <rect class="cls-1" x="57" y="113" width="8" height="8"/>
+  <polygon class="cls-1" points="97 105 89 105 89 113 89 121 97 121 97 113 97 105"/>
+  <rect class="cls-1" x="97" y="57" width="8" height="8"/>
+  <rect class="cls-1" x="73" y="113" width="8" height="8"/>
+  <rect class="cls-1" x="89" y="81" width="8" height="8"/>
+  <rect class="cls-1" x="97" y="97" width="8" height="8"/>
+  <rect class="cls-1" x="121" y="137" width="8" height="8"/>
+  <rect class="cls-1" x="177" y="193" width="8" height="8"/>
+  <path class="cls-1" d="M41,161h-24v40h40v-40h-16ZM49,177v16h-24v-24h24v8Z"/>
+  <path class="cls-1" d="M33,57h24V17H17v40h16ZM25,41v-16h24v24h-24v-8Z"/>
+  <rect class="cls-1" x="121" y="89" width="8" height="8"/>
+  <rect class="cls-1" x="89" y="137" width="8" height="8"/>
+  <rect class="cls-1" x="113" y="169" width="8" height="8"/>
+  <polygon class="cls-1" points="113 89 113 81 121 81 121 73 113 73 105 73 97 73 97 81 105 81 105 89 105 97 113 97 113 89"/>
+  <path class="cls-1" d="M0,0v218h218V0H0ZM121,9h8v8h-8v-8ZM73,9h8v8h8v-8h24v8h-16v16h-8v-8h-8v-8h-8v-8ZM9,57V9h56v56H9v-8ZM65,161v48H9v-56h56v8ZM209,81h-8v8h8v24h-8v8h8v16h-8v16h8v16h-8v8h8v32h-8v-8h-16v8h-8v-8h-16v-8h8v-8h24v-24h8v-8h-16v-16h-8v40h-16v8h-8v16h-8v8h-8v-8h-16v-8h16v8h8v-16h-8v-8h-8v8h-16v8h-8v8h8v8h-16v-8h-8v8h-16v-16h8v-8h-8v-16h8v-8h8v-8h-16v-8h-16v-8h32v-8h-32v-8h-16v8h8v16H17v-16h8v8h8v-24h-8v8h-8v-8h-8v-40h16v24h-8v16h8v-8h8v8h24v-8h8v8h8v-8h8v-8h8v-8h-24v8h-16v-8h-8v8h-8v-8h8v-8h-8v-8h16v16h16v-8h-8v-8h8v8h16v-8h-8v-16h8v16h8v-24h-8v-8h8v8h32v-8h-16v-8h8v-8h24V9h8v16h-8v8h8v16h-8v-16h-16v8h8v32h8v-16h8v24h-8v24h8v8h-8v8h16v8h-8v8h16v-8h8v-16h-16v-16h-8v-8h8v8h16v-8h-8v-8h-8v-8h8v8h40v-8h8v8ZM209,17v48h-56V9h56v8Z"/>
+  <polygon class="cls-1" points="185 89 185 97 193 97 201 97 201 89 193 89 185 89"/>
+  <path class="cls-1" d="M153,145h-8v24h24v-24h-16ZM161,161h-8v-8h8v8Z"/>
+  <rect class="cls-1" x="105" y="177" width="8" height="8"/>
+  <rect class="cls-1" x="169" y="129" width="8" height="8"/>
+  <polygon class="cls-1" points="193 105 185 105 177 105 169 105 169 113 177 113 177 121 185 121 193 121 193 113 201 113 201 105 193 105"/>
+  <rect class="cls-1" x="193" y="129" width="8" height="8"/>
+  <rect class="cls-1" x="89" y="177" width="8" height="8"/>
+  <rect class="cls-1" x="89" y="161" width="8" height="8"/>
+  <path class="cls-1" d="M185,17h-24v40h40V17h-16ZM193,33v16h-24v-24h24v8Z"/>
+</svg>
