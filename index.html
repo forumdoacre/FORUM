@@ -294,7 +294,13 @@
                         </table>
                     </div>
                 </div>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl">
+                <div class="mt-8 w-full max-w-4xl text-center mb-6">
+                    <p class="text-lg font-semibold text-slate-700">
+                        **Cenário 1:** Sem renovar DEL Acre<br>
+                        **Cenário 2:** Renovando Xapuri, Epitaciolândia e Rio Branco
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl">
                     <div class="kpi-card">
                         <h3 class="text-slate-500 font-medium text-lg">Despesas Sem SEBRAE (Cenário 1)</h3>
                         <p class="text-3xl font-bold text-red-600 mt-2">R$ 322.384,75</p>
@@ -410,6 +416,7 @@
                     <tbody id="expenses-without-sebrae-table-body" class="bg-white divide-y divide-gray-200">
                         <!-- Content populated by JS -->
                     </tbody>
+                </tbody>
                 </table>
             </div>
         </div>
@@ -441,7 +448,8 @@
             'AMAPÁ': { 'VALOR MENSAL': 37500, 'PARCELAS_C1': 5, 'TOTAL_C1': 187500, 'PARCELAS_C2': 5, 'TOTAL_C2': 187500 },
             'RIO BRANCO': { 'VALOR MENSAL': 17000, 'PARCELAS_C1': 4, 'TOTAL_C1': 68000, 'PARCELAS_C2': 5, 'TOTAL_C2': 85000 },
             'XAPURI': { 'VALOR MENSAL': 10080, 'PARCELAS_C1': 2, 'TOTAL_C1': 20160, 'PARCELAS_C2': 5, 'TOTAL_C2': 50400 },
-            'EPITACIOLANDIA': { 'VALOR MENSAL': 8400, 'PARCELAS_C1': 6, 'TOTAL_C1': 50400, 'PARCELAS_C2': 6, 'TOTAL_C2': 50400 }
+            'EPITACIOLANDIA': { 'VALOR MENSAL': 8400, 'PARCELAS_C1': 6, 'TOTAL_C1': 50400, 'PARCELAS_C2': 6, 'TOTAL_C2': 50400 },
+            'DEL ACRE': { 'VALOR MENSAL': 35480, 'PARCELAS_C1': '', 'TOTAL_C1': 130160, 'PARCELAS_C2': '', 'TOTAL_C2': 185800 }
         };
 
         const totalRevenues = {
