@@ -210,6 +210,12 @@
                     </svg>
                     Saldos
                 </a>
+                <a href="#contact">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Contato
+                </a>
             </nav>
         </aside>
 
@@ -288,16 +294,26 @@
                         </table>
                     </div>
                 </div>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl">
                     <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Total Despesas Sem SEBRAE (Cenário 1)</h3>
-                        <p class="text-4xl font-bold text-red-600 mt-2">R$ 322.384,75</p>
-                        <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithoutSebraeModal')">Ver Detalhes</button>
+                        <h3 class="text-slate-500 font-medium text-lg">Despesas Sem SEBRAE (Cenário 1)</h3>
+                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 322.384,75</p>
+                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithoutSebraeModal')">Ver Detalhes</button>
                     </div>
                     <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Total Despesas Com SEBRAE (Cenário 2)</h3>
-                        <p class="text-4xl font-bold text-red-600 mt-2">R$ 294.619,75</p>
-                        <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithSebraeModal')">Ver Detalhes</button>
+                        <h3 class="text-slate-500 font-medium text-lg">Despesas Sem SEBRAE (Cenário 2)</h3>
+                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 358.984,75</p>
+                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithoutSebraeModal')">Ver Detalhes</button>
+                    </div>
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg">Despesas Com SEBRAE (Cenário 1)</h3>
+                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 294.619,75</p>
+                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithSebraeModal')">Ver Detalhes</button>
+                    </div>
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg">Despesas Com SEBRAE (Cenário 2)</h3>
+                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 331.219,75</p>
+                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithSebraeModal')">Ver Detalhes</button>
                     </div>
                 </div>
                 <p class="text-sm text-slate-600 mt-8 max-w-2xl text-center">
@@ -326,6 +342,30 @@
                 </div>
             </section>
 
+            <section id="contact" class="slide">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Contato e Redes Sociais</h2>
+                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
+                    Entre em contato com o Fórum Empresarial de Inovação e Desenvolvimento para mais informações.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-center">
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg mb-2">Website</h3>
+                        <p class="text-2xl font-bold text-blue-600"><a href="http://www.forumdoacre.org.br" target="_blank" class="hover:underline">www.forumdoacre.org.br</a></p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg mb-2">E-mail</h3>
+                        <p class="text-2xl font-bold text-blue-600"><a href="mailto:contato@forumdoacre.org.br" class="hover:underline">contato@forumdoacre.org.br</a></p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg mb-2">Instagram</h3>
+                        <p class="text-2xl font-bold text-blue-600"><a href="https://www.instagram.com/forumempresarial.ac" target="_blank" class="hover:underline">@forumempresarial.ac</a></p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3 class="text-slate-500 font-medium text-lg mb-2">Telefone</h3>
+                        <p class="text-2xl font-bold text-blue-600">68 99959-8606</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
