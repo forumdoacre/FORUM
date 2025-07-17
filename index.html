@@ -1,789 +1,489 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação Orçamento Fórum Empresarial</title>
+    <title>DEL Turismo 2025 - Fórum Empresarial</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Chosen Palette: Modern Green-Blue with Neutrals -->
-    <!-- Application Structure Plan: A multi-slide presentation structure with a fixed sidebar navigation. Each slide ('Visão Geral', 'Receitas', 'Despesas', 'Saldos', 'Contato') focuses on a key financial or organizational aspect. This linear, slide-based approach is intuitive for presentations, allowing sequential understanding of the budget. Navigation is clear, and the content for each section is self-contained. Modals are implemented for detailed data views, triggered by user interaction. -->
-    <!-- Visualization & Content Choices: Key financial figures are presented in prominent cards for immediate impact. Bar charts (Chart.js) are used for comparing revenues and expenses across scenarios, as they clearly show differences. Detailed tables are used within modals to present granular financial breakdowns. Doughnut charts visualize the breakdown of DEL revenues. All visualizations are canvas-based, ensuring responsiveness and avoiding SVG for compatibility. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* blue-50 */
-            color: #334155; /* slate-700 */
+            background-color: #f0f4f8; /* Light blue-gray for a modern feel */
+            color: #333;
         }
-        .sidebar {
-            width: 250px;
-            background-color: #1e293b; /* slate-800 */
-            color: #e2e8f0; /* slate-200 */
-            padding: 2rem 1rem;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            top: 0;
-            left: 0;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
         }
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: 500;
-        }
-        .sidebar-nav a:hover, .sidebar-nav a.active {
-            background-color: #3b82f6; /* blue-500 */
-            color: #ffffff;
-        }
-        .sidebar-nav a svg {
-            margin-right: 0.75rem;
-            width: 20px;
-            height: 20px;
-        }
-        .content-area {
-            margin-left: 250px;
-            padding: 2rem;
-            flex-grow: 1;
-        }
-        .slide {
-            min-height: calc(100vh - 4rem); /* Adjust for padding */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        .section-title {
+            color: #0056b3; /* Darker blue from logo */
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
             margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 10px;
         }
-        .kpi-card {
-            background-color: #f8fafc; /* slate-50 */
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #28a745; /* Green from logo */
+            border-radius: 2px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners for the table container */
+            border: 1px solid #e2e8f0; /* Subtle border around tables */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0; /* Remove default margin */
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 1.25rem 1.5rem; /* Increased padding for better spacing */
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #e9f5ee; /* Light green background for headers */
+            color: #0056b3;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f7fafc; /* Light stripe for readability */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .highlight-row {
+            background-color: #cce7f0 !important; /* Lighter blue for highlight, important to override stripe */
+            font-weight: 700;
+            color: #0056b3;
+            border-top: 2px solid #0056b3; /* Stronger border for totals */
+        }
+        .scenario-card {
+            background-color: #ffffff; /* White background for clarity */
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem; /* Increased padding */
+            margin-bottom: 1.5rem;
+            border: 1px solid #cce7f0;
+            display: flex;
+            flex-direction: column;
+        }
+        .scenario-card.scenario-1 {
+            border-left: 8px solid #007bff; /* Thicker blue border */
+        }
+        .scenario-card.scenario-2 {
+            border-left: 8px solid #28a745; /* Thicker green border */
+        }
+        .value-display {
+            background-color: #e9f5ee; /* Light green for value displays */
+            border: 1px solid #d4edda;
             border-radius: 0.75rem;
             padding: 1.5rem;
-            box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.1);
             text-align: center;
-            flex-grow: 1;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #155724; /* Darker green for text */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px; /* Constrain chart width */
-            height: 350px; /* Fixed height for charts */
-            max-height: 50vh; /* Max height for responsiveness */
-            margin: 0 auto; /* Center charts */
-        }
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                box-shadow: none;
-                padding: 1rem;
-            }
-            .content-area {
-                margin-left: 0;
-                padding: 1rem;
-            }
-            .sidebar-nav {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .sidebar-nav a {
-                padding: 0.5rem 0.75rem;
-                margin: 0.25rem;
-                font-size: 0.875rem;
-            }
-            .sidebar-nav a svg {
-                display: none;
-            }
-            .slide {
-                min-height: auto;
-                padding: 1rem;
-            }
-            .kpi-card {
-                padding: 1rem;
-            }
-            .chart-container {
-                height: 250px;
-            }
-        }
-
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
             justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            min-height: 120px;
         }
-        .modal.show {
-            opacity: 1;
-            visibility: visible;
+        .value-display .label {
+            font-size: 1rem; /* Slightly larger label */
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
         }
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
+        .footer {
+            background-color: #0056b3;
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #ffc107; /* Orange/yellow from logo */
+        }
+        .logo-header {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 3rem auto;
+            display: block;
+        }
+        .summary-box {
+            background-color: #d4edda; /* Light green for summary box */
             border-radius: 0.75rem;
-            max-width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #155724; /* Dark green text */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: auto; /* Push to bottom of scenario card */
+            margin-top: 1.5rem;
         }
-        .modal.show .modal-content {
-            transform: translateY(0);
-        }
-        .modal-close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #64748b; /* slate-500 */
-        }
-        .modal-close-button:hover {
-            color: #1e293b; /* slate-800 */
+        .summary-value {
+            font-size: 2.5rem; /* Larger value */
+            font-weight: 800; /* Bolder value */
+            color: #28a745; /* Green for positive values */
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <div class="flex flex-col md:flex-row min-h-screen">
-        <aside class="sidebar">
-            <div class="mb-8 text-center">
-                <h2 class="text-2xl font-bold text-white">Fórum Empresarial</h2>
-                <p class="text-sm text-slate-400">Orçamento e Projeções</p>
-            </div>
-            <nav class="sidebar-nav flex flex-col items-stretch w-full">
-                <a href="#overview" class="active">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001 1h2a1 1 0 001-1v-4a1 1 0 00-1-1h-2a1 1 0 00-1 1v4zm-6 0h6"/>
-                    </svg>
-                    Visão Geral
-                </a>
-                <a href="#revenues">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V4m0 8v4m-6 1H6a2 2 0 00-2 2v3a2 2 0 002 2h7.586a1 1 0 00.707-.293l3.414-3.414a1 1 0 00.293-.707V10a2 2 0 00-2-2h-3.414l-3.414-3.414A1 1 0 009.586 4H6a2 2 0 00-2 2v3a2 2 0 002 2h3"/>
-                    </svg>
-                    Receitas
-                </a>
-                <a href="#expenses">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    Despesas
-                </a>
-                <a href="#balances">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14V6m3 8V6m3 8V6M5 18h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                    Saldos
-                </a>
-                <a href="#contact">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                    Contato
-                </a>
-            </nav>
-        </aside>
 
-        <main class="content-area">
-            <section id="overview" class="slide">
-                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Orçamento Fórum Empresarial</h2>
-                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
-                    Esta apresentação detalha as projeções financeiras do Fórum Empresarial para o período de Julho a Dezembro de 2025, considerando dois cenários distintos. O objetivo é fornecer uma visão clara das receitas e despesas esperadas, bem como dos saldos projetados.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Receita Julho a Dezembro/25 (Cenário 1)</h3>
-                        <p class="text-4xl font-bold text-green-600 mt-2">R$ 326.060,00</p>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Receita Julho a Dezembro/25 (Cenário 2)</h3>
-                        <p class="text-4xl font-bold text-blue-600 mt-2">R$ 373.300,00</p>
-                    </div>
-                    <div class="kpi-card md:col-span-2">
-                        <h3 class="text-slate-500 font-medium text-lg">Saldo Disponível CC em 15/07</h3>
-                        <p class="text-4xl font-bold text-purple-600 mt-2">R$ 119.393,37</p>
-                    </div>
-                </div>
-            </section>
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-700 to-green-500 py-8 px-4 text-white text-center rounded-b-3xl shadow-lg">
+        <div class="container">
+            <img src="https://raw.githubusercontent.com/forumdoacre/FORUM/refs/heads/main/Logos/LogoHB.svg" alt="Fórum Empresarial de Inovação e Desenvolvimento Logo" class="logo-header">
+            <h1 class="text-5xl font-bold mb-2">DEL TURISMO</h1>
+            <p class="text-xl font-light">Fórum Empresarial de Inovação e Desenvolvimento do Acre</p>
+        </div>
+    </header>
 
-            <section id="revenues" class="slide">
-                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Estimativas de Receitas - DEL</h2>
-                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
-                    Esta seção detalha as receitas esperadas de Julho a Dezembro de 2025, com foco nas contribuições DEL, comparando o Cenário 1 (sem renovação do DEL Acre) e o Cenário 2 (com renovação em Xapuri, Epitaciolândia e Rio Branco).
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-                    <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-center items-center">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Comparativo de Receitas DEL</h3>
-                        <div class="chart-container">
-                            <canvas id="revenueChart"></canvas>
-                        </div>
-                        <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('delRevenueModal')">Ver Detalhes DEL</button>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-center items-center">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Composição Receitas DEL (Cenário 2)</h3>
-                        <div class="chart-container" style="height: 300px; max-height: 40vh; max-width: 400px;">
-                            <canvas id="delCompositionChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <main class="container py-8">
 
-            <section id="expenses" class="slide">
-                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Previsão de Despesas</h2>
-                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
-                    Abaixo despesas mensais previstas para o Fórum, detalhando os custos com e sem o convênio SEBRAE, além dos "Restos a Pagar" de Julho.
-                </p>
-                <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Despesas Mensais Detalhadas</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+        <!-- Estimativas de Receitas 2025 Section -->
+        <section id="receitas-2025" class="mb-12">
+            <h2 class="section-title">Estimativas de Receitas 2025</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="scenario-card scenario-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Cenário 1: Sem Renovar DEL Acre</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor Mensal Total</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">A Pagar Recurso Próprio (S/ SEBRAE)</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">A Pagar Recurso Próprio (C/ SEBRAE)</th>
+                                    <th>DEL</th>
+                                    <th>Valor Mensal</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Equipe Fórum (FOLHA)</td><td class="px-4 py-2 whitespace-nowrap">R$ 37.379,30</td><td class="px-4 py-2 whitespace-nowrap">R$ 16.286,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 5.660,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Consultoria DEL</td><td class="px-4 py-2 whitespace-nowrap">R$ 26.800,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 26.800,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 26.800,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Passagens e diárias DEL</td><td class="px-4 py-2 whitespace-nowrap">R$ 8.075,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 8.075,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 8.075,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Despesas com transporte</td><td class="px-4 py-2 whitespace-nowrap">R$ 5.550,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 5.550,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 0,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Contador, ISS e taxa bancária</td><td class="px-4 py-2 whitespace-nowrap">R$ 2.250,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 2.250,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 2.250,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Locação, limpeza, energia, telefone e internet</td><td class="px-4 py-2 whitespace-nowrap">R$ 4.470,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 4.470,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 4.470,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Fundo Fixo</td><td class="px-4 py-2 whitespace-nowrap">R$ 759,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 759,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 759,00</td></tr>
-                                <tr><td class="px-4 py-2 whitespace-nowrap">Material e lanches</td><td class="px-4 py-2 whitespace-nowrap">R$ 1.250,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 1.250,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 200,00</td></tr>
-                                <tr class="font-bold bg-gray-100"><td class="px-4 py-2 whitespace-nowrap">TOTAL</td><td class="px-4 py-2 whitespace-nowrap">R$ 86.533,30</td><td class="px-4 py-2 whitespace-nowrap">R$ 65.440,00</td><td class="px-4 py-2 whitespace-nowrap">R$ 48.214,00</td></tr>
+                            <tbody>
+                                <tr><td>AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 187.500,00</td></tr>
+                                <tr><td>RIO BRANCO</td><td>R$ 17.000,00</td><td>R$ 68.000,00</td></tr>
+                                <tr><td>XAPURI</td><td>R$ 10.080,00</td><td>R$ 20.160,00</td></tr>
+                                <tr><td>EPITACIOLANDIA</td><td>R$ 8.400,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 130.160,00</td></tr>
+                                <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 72.980,00</td><td>R$ 326.060,00</td></tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="mt-8 w-full max-w-4xl text-center mb-6">
-                    <p class="text-lg font-semibold text-slate-700">
-                        **Cenário 1:** Sem renovar DEL Acre<br>
-                        **Cenário 2:** Renovando Xapuri, Epitaciolândia e Rio Branco
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl">
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Despesas Sem SEBRAE (Cenário 1)</h3>
-                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 332.384,75</p>
-                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithoutSebraeModal')">Ver Detalhes</button>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Despesas Sem SEBRAE (Cenário 2)</h3>
-                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 368.984,75</p>
-                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithoutSebraeModal')">Ver Detalhes</button>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Despesas Com SEBRAE (Cenário 1)</h3>
-                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 300.619,75</p>
-                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithSebraeModal')">Ver Detalhes</button>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg">Despesas Com SEBRAE (Cenário 2)</h3>
-                        <p class="text-3xl font-bold text-red-600 mt-2">R$ 341.219,75</p>
-                        <button class="mt-4 px-4 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors" onclick="openModal('expensesWithSebraeModal')">Ver Detalhes</button>
+                    <div class="summary-box">
+                        A Receber de Junho a Dezembro:
+                        <div class="summary-value">R$ 326.060,00</div>
                     </div>
                 </div>
-                <p class="text-sm text-slate-600 mt-8 max-w-2xl text-center">
-                    OBS Cenário 1: -R$ 21.775, -R$ 4.475 e -R$ 10.350 referente a Xapuri, Epitaciolândia e Rio Branco, respectivamente.
-                </p>
-            </section>
 
-            <section id="balances" class="slide">
-                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Saldos Projetados</h2>
-                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
-                    Esta seção apresenta os saldos finais projetados para o Fórum Empresarial, considerando ambos os cenários e a inclusão ou não do convênio SEBRAE.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-                    <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-center items-center">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Saldo Sem SEBRAE</h3>
-                        <div class="chart-container">
-                            <canvas id="balanceWithoutSebraeChart"></canvas>
-                        </div>
+                <div class="scenario-card scenario-2">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Cenário 2: Renovando Xapuri, Epitaciolândia e Rio Branco</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DEL</th>
+                                    <th>Valor Mensal</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 187.500,00</td></tr>
+                                <tr><td>RIO BRANCO</td><td>R$ 17.000,00</td><td>R$ 85.000,00</td></tr>
+                                <tr><td>XAPURI</td><td>R$ 10.080,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>EPITACIOLANDIA</td><td>R$ 8.400,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 177.400,00</td></tr>
+                                <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 72.980,00</td><td>R$ 373.300,00</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-center items-center">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Saldo Com SEBRAE</h3>
-                        <div class="chart-container">
-                            <canvas id="balanceWithSebraeChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="contact" class="slide">
-                <h2 class="text-4xl font-bold text-slate-800 mb-6 text-center">Contato e Redes Sociais</h2>
-                <p class="text-lg text-slate-600 mb-8 max-w-2xl text-center">
-                    Entre em contato com o Fórum Empresarial de Inovação e Desenvolvimento para mais informações.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-center">
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg mb-2">Website</h3>
-                        <p class="text-2xl font-bold text-blue-600"><a href="http://www.forumdoacre.org.br" target="_blank" class="hover:underline">www.forumdoacre.org.br</a></p>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg mb-2">E-mail</h3>
-                        <p class="text-2xl font-bold text-blue-600"><a href="mailto:contato@forumdoacre.org.br" class="hover:underline">contato@forumdoacre.org.br</a></p>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg mb-2">Instagram</h3>
-                        <p class="text-2xl font-bold text-blue-600"><a href="https://www.instagram.com/forumempresarial.ac" target="_blank" class="hover:underline">@forumempresarial.ac</a></p>
-                    </div>
-                    <div class="kpi-card">
-                        <h3 class="text-slate-500 font-medium text-lg mb-2">Telefone</h3>
-                        <p class="text-2xl font-bold text-blue-600">68 99959-8606</p>
+                    <div class="summary-box">
+                        A Receber de Junho a Dezembro:
+                        <div class="summary-value">R$ 373.300,00</div>
                     </div>
                 </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Modals -->
-    <div id="delRevenueModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close-button" onclick="closeModal('delRevenueModal')">&times;</button>
-            <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center">Detalhes de Receitas DEL</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DEL</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor Mensal</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parcelas (Cenário 1)</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (Cenário 1)</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parcelas (Cenário 2)</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (Cenário 2)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="del-revenue-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Content populated by JS -->
-                    </tbody>
-                </table>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div id="expensesWithoutSebraeModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close-button" onclick="closeModal('expensesWithoutSebraeModal')">&times;</button>
-            <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center">Detalhes de Despesas Sem SEBRAE</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cenário 1</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cenário 2</th>
-                        </tr>
-                    </thead>
-                    <tbody id="expenses-without-sebrae-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Content populated by JS -->
-                    </tbody>
-                </tbody>
-                </table>
+        <!-- Despesas Previstas Section -->
+        <section id="despesas-previstas" class="mb-12">
+            <h2 class="section-title">Previsão Mensal de Despesas DEL</h2>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Despesas Mensais</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Pagamento Consultor - DEL Amapá</td><td>R$ 13.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Rio Branco</td><td>R$ 5.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Xapuri</td><td>R$ 4.800,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Epitaciolândia</td><td>R$ 4.000,00</td></tr>
+                            <tr><td>Diária Acre - Consultor</td><td>R$ 2.100,00</td></tr>
+                            <tr><td>Diária Acre - Motorista</td><td>R$ 475,00</td></tr>
+                            <tr><td>Passagens mensais AC e Amapá</td><td>R$ 5.500,00</td></tr>
+                            <tr><td>Combustível</td><td>R$ 1.500,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 36.375,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div id="expensesWithSebraeModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close-button" onclick="closeModal('expensesWithSebraeModal')">&times;</button>
-            <h3 class="text-2xl font-bold text-slate-800 mb-4 text-center">Detalhes de Despesas Com SEBRAE</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cenário 1</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cenário 2</th>
-                        </tr>
-                    </thead>
-                    <tbody id="expenses-with-sebrae-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Content populated by JS -->
-                    </tbody>
-                </table>
+        <!-- Previsão de Julho a Dezembro de 2025 Section -->
+        <section id="previsao-jul-dez-2025" class="mb-12">
+            <h2 class="section-title">Previsão de Julho a Dezembro de 2025 - Orçamento DEL Turismo</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Receitas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Cenário 1</th>
+                                <th>Cenário 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>RECEITA JULHO A DEZEMBRO/25</td><td>R$ 326.060,00</td><td>R$ 373.300,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 326.060,00</td><td>R$ 373.300,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">OBS Cenário 1: -21.775, -4.475 e -10.350 referente a Xapuri, Epitaciolândia e Rio Branco.</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Despesas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Cenário 1</th>
+                                <th>Cenário 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (ago/25 a dez/25) (Descontado proporcionalmente diárias e pagamentos)</td><td>R$ 145.275,00</td><td>R$ 181.875,00</td></tr>
+                            <tr><td>VIAGEM TÍSSIA AMAPÁ (out/25)</td><td>R$ 9.600,00</td><td>R$ 9.600,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 154.875,00</td><td>R$ 191.475,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                    <div class="value-display col-span-full md:col-span-1">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 36.605,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo ao Final de 2025 (Cenário 1)</span>
+                        <span>R$ 171.185,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo ao Final de 2025 (Cenário 2)</span>
+                        <span>R$ 181.825,00</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <script>
-        const revenueData = {
-            'AMAPÁ': { 'VALOR MENSAL': 37500, 'PARCELAS_C1': 5, 'TOTAL_C1': 187500, 'PARCELAS_C2': 5, 'TOTAL_C2': 187500 },
-            'RIO BRANCO': { 'VALOR MENSAL': 17000, 'PARCELAS_C1': 4, 'TOTAL_C1': 68000, 'PARCELAS_C2': 5, 'TOTAL_C2': 85000 },
-            'XAPURI': { 'VALOR MENSAL': 10080, 'PARCELAS_C1': 2, 'TOTAL_C1': 20160, 'PARCELAS_C2': 5, 'TOTAL_C2': 50400 },
-            'EPITACIOLANDIA': { 'VALOR MENSAL': 8400, 'PARCELAS_C1': 6, 'TOTAL_C1': 50400, 'PARCELAS_C2': 6, 'TOTAL_C2': 50400 },
-        };
+        <!-- DEL TURISMO 2026 Section -->
+        <section id="del-turismo-2026" class="mb-12">
+            <h2 class="section-title">DEL TURISMO 2026</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Estimativas de Receitas - 2026</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DEL</th>
+                                <th>Valor Mensal</th>
+                                <th>Total Anual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DEL AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 450.000,00</td></tr>
+                            <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 425.760,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 72.980,00</td><td>R$ 875.760,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        const totalRevenues = {
-            scenario1: 326060,
-            scenario2: 373300,
-            saldoInicial: 119393.37
-        };
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Despesas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Despesas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (jan/26 a dez/26)</td><td>R$ 436.500,00</td></tr>
+                            <tr><td>3 VIAGENS TÍSSIA AMAPÁ (abril, agosto e dez/26)</td><td>R$ 28.800,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 465.300,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        const monthlyExpensesDetailed = [
-            { desc: 'Equipe Fórum (FOLHA, R$1.000)', total: 35379.30, proprio_s_sebrae: 14286.00, proprio_c_sebrae: 5660.00 },
-            { desc: 'Consultoria DEL', total: 26800.00, proprio_s_sebrae: 26800.00, proprio_c_sebrae: 26800.00 },
-            { desc: 'Passagens e diárias DEL', total: 8075.00, proprio_s_sebrae: 8075.00, proprio_c_sebrae: 8075.00 },
-            { desc: 'Despesas com transporte', total: 5550.00, proprio_s_sebrae: 5550.00, proprio_c_sebrae: 0.00 },
-            { desc: 'Contador, ISS e taxa bancária', total: 2250.00, proprio_s_sebrae: 2250.00, proprio_c_sebrae: 2250.00 },
-            { desc: 'Locação, limpeza, energia, telefone e internet', total: 4470.00, proprio_s_sebrae: 4470.00, proprio_c_sebrae: 4470.00 },
-            { desc: 'Fundo Fixo', total: 759.00, proprio_s_sebrae: 759.00, proprio_c_sebrae: 759.00 },
-            { desc: 'Material e lanches', total: 1250.00, proprio_s_sebrae: 1250.00, proprio_c_sebrae: 200.00 }
-        ];
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="value-display">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 36.605,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo 2026</span>
+                        <span>R$ 410.460,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        const expensesJulToDec = {
-            withoutSebrae: {
-                restos_a_pagar_julho: 32184.75,
-                despesa_mensal_forum_ago_dez_c1: 290600.00,
-                despesa_mensal_forum_ago_dez_c2: 327200.00,
-                viagem_tissia_amapa: 9600.00,
-                total_c1: 332384.75,
-                total_c2: 368984.75
-            },
-            withSebrae: {
-                restos_a_pagar_julho: 32184.75,
-                despesa_mensal_forum_ago_dez_c1: 200470.00,
-                despesa_mensal_forum_ago_dez_c2: 241070.00,
-                contrapartida_julho: 58365.00,
-                viagem_tissia_amapa: 9600.00,
-                total_c1: 300619.75,
-                total_c2: 341219.75
-            }
-        };
+        <!-- DEL TURISMO JURUÁ Section -->
+        <section id="del-turismo-jurua" class="mb-12">
+            <h2 class="section-title">DEL TURISMO JURUÁ</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Estimativas de Receitas Juruá</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DEL</th>
+                                <th>Valor Mensal</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CRUZEIRO DO SUL</td><td>R$ 17.000,00</td><td>R$ 204.000,00</td></tr>
+                            <tr><td>RODRIGUES ALVES</td><td>R$ 12.500,00</td><td>R$ 150.000,00</td></tr>
+                            <tr><td>MÂNCIO LIMA</td><td>R$ 12.500,00</td><td>R$ 150.000,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 42.000,00</td><td>R$ 504.000,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="value-display mt-8">
+                    <span class="label">A Receber</span>
+                    <span>R$ 500.000,00</span>
+                </div>
 
-        const balances = {
-            withoutSebrae: {
-                scenario1: 113068.62,
-                scenario2: 123708.62
-            },
-            withSebrae: {
-                scenario1: 144833.62,
-                scenario2: 151473.62
-            }
-        };
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Previsão Mensal de Despesas DEL Juruá</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Despesas Mensais</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Pagamento Consultor - DEL Cruzeiro do Sul</td><td>R$ 5.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Rodrigues Alves</td><td>R$ 4.500,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Mâncio Lima</td><td>R$ 4.500,00</td></tr>
+                            <tr><td>Diária Consultor</td><td>R$ 2.450,00</td></tr>
+                            <tr><td>Diária Motorista</td><td>R$ 2.225,00</td></tr>
+                            <tr><td>Combustível</td><td>R$ 2.000,00</td></tr>
+                            <tr class="highlight-row"><td>DESPESA TOTAL MENSAL</td><td>R$ 20.675,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        let charts = {};
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Previsão Anual Juruá - Orçamento DEL Turismo</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Receitas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>RECEITA JANEIRO A DEZEMBRO/26</td><td>R$ 504.000,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 504.000,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderRevenueChart();
-            renderDelCompositionChart();
-            renderBalanceCharts();
-            setupSidebarNavigation();
-            populateModalContent();
-        });
+                <div class="table-container mt-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Despesas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (jan/26 a dez/26)</td><td>R$ 248.100,00</td></tr>
+                            <tr><td>3 PASSAGENS TÍSSIA (jan/jul/nov/26)</td><td>R$ 6.000,00</td></tr>
+                            <tr><td>DIÁRIAS TÍSSIA</td><td>R$ 8.100,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 262.200,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-        }
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="value-display">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 21.325,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo 2026</span>
+                        <span>R$ 241.800,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('show');
-        }
+    </main>
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2025 FÓRUM EMPRESARIAL de Inovação e Desenvolvimento. Todos os direitos reservados.</p>
+        <p class="mt-2">
+            <a href="#receitas-2025">Receitas</a> |
+            <a href="#despesas-previstas">Despesas</a> |
+            <a href="#del-turismo-2026">DEL 2026</a> |
+            <a href="#del-turismo-jurua">DEL Juruá</a>
+        </p>
+    </footer>
 
-        function populateModalContent() {
-            // DEL Revenue Modal
-            const delRevenueBody = document.getElementById('del-revenue-table-body');
-            delRevenueBody.innerHTML = '';
-            for (const del in revenueData) {
-                const data = revenueData[del];
-                const row = `<tr>
-                    <td class="px-4 py-2 whitespace-nowrap">${del}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">${formatCurrency(data['VALOR MENSAL'])}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">${data.PARCELAS_C1}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">${formatCurrency(data.TOTAL_C1)}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">${data.PARCELAS_C2}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">${formatCurrency(data.TOTAL_C2)}</td>
-                </tr>`;
-                delRevenueBody.insertAdjacentHTML('beforeend', row);
-            }
-
-            // Expenses Without Sebrae Modal
-            const expensesWithoutSebraeBody = document.getElementById('expenses-without-sebrae-table-body');
-            expensesWithoutSebraeBody.innerHTML = `
-                <tr><td class="px-4 py-2 whitespace-nowrap">RESTOS A PAGAR DE JULHO</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.restos_a_pagar_julho)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.restos_a_pagar_julho)}</td></tr>
-                <tr><td class="px-4 py-2 whitespace-nowrap">DESPESA MENSAL FÓRUM SEM SEBRAE (ago/25 a dez/25)</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.despesa_mensal_forum_ago_dez_c1)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.despesa_mensal_forum_ago_dez_c2)}</td></tr>
-                <tr><td class="px-4 py-2 whitespace-nowrap">VIAGEM TÍSSIA AMAPÁ (OUT/25)</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.viagem_tissia_amapa)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.viagem_tissia_amapa)}</td></tr>
-                <tr class="font-bold bg-gray-100"><td class="px-4 py-2 whitespace-nowrap">TOTAL GERAL SEM SEBRAE</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.total_c1)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withoutSebrae.total_c2)}</td></tr>
-            `;
-
-            // Expenses With Sebrae Modal
-            const expensesWithSebraeBody = document.getElementById('expenses-with-sebrae-table-body');
-            expensesWithSebraeBody.innerHTML = `
-                <tr><td class="px-4 py-2 whitespace-nowrap">RESTOS A PAGAR DE JULHO</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.restos_a_pagar_julho)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.restos_a_pagar_julho)}</td></tr>
-                <tr><td class="px-4 py-2 whitespace-nowrap">DESPESA MENSAL FÓRUM COM SEBRAE (ago/25 a dez/25)</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.despesa_mensal_forum_ago_dez_c1)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.despesa_mensal_forum_ago_dez_c2)}</td></tr>
-                <tr><td class="px-4 py-2 whitespace-nowrap">CONTRAPARTIDA (Julho)</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.contrapartida_julho)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.contrapartida_julho)}</td></tr>
-                <tr><td class="px-4 py-2 whitespace-nowrap">VIAGEM TÍSSIA AMAPÁ (OUT/25)</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.viagem_tissia_amapa)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.viagem_tissia_amapa)}</td></tr>
-                <tr class="font-bold bg-gray-100"><td class="px-4 py-2 whitespace-nowrap">TOTAL GERAL COM CONVÊNIO</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.total_c1)}</td><td class="px-4 py-2 whitespace-nowrap">${formatCurrency(expensesJulToDec.withSebrae.total_c2)}</td></tr>
-            `;
-        }
-
-        function renderRevenueChart() {
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-            if (charts.revenue) charts.revenue.destroy();
-
-            const labels = Object.keys(revenueData);
-            const dataC1 = labels.map(key => revenueData[key].TOTAL_C1);
-            const dataC2 = labels.map(key => revenueData[key].TOTAL_C2);
-
-            charts.revenue = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Cenário 1 (Sem renovar DEL Acre)',
-                            data: dataC1,
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)', /* blue-500 */
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Cenário 2 (Renovando DELs)',
-                            data: dataC2,
-                            backgroundColor: 'rgba(16, 185, 129, 0.7)', /* emerald-500 */
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) { return formatCurrency(value); }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderDelCompositionChart() {
-            const ctx = document.getElementById('delCompositionChart').getContext('2d');
-            if (charts.delComposition) charts.delComposition.destroy();
-
-            const labels = Object.keys(revenueData);
-            const data = labels.map(key => revenueData[key].TOTAL_C2);
-
-            charts.delComposition = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.7)', /* blue-500 */
-                            'rgba(16, 185, 129, 0.7)', /* emerald-500 */
-                            'rgba(251, 191, 36, 0.7)', /* amber-400 */
-                            'rgba(244, 63, 94, 0.7)', /* rose-500 */
-                            'rgba(147, 51, 234, 0.7)'  /* violet-600 */
-                        ],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                boxWidth: 12,
-                                padding: 10,
-                                font: { size: 12 }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                                    const value = context.raw;
-                                    const percentage = ((value / total) * 100).toFixed(2);
-                                    return `${context.label}: ${formatCurrency(value)} (${percentage}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderBalanceCharts() {
-            const ctxWithout = document.getElementById('balanceWithoutSebraeChart').getContext('2d');
-            const ctxWith = document.getElementById('balanceWithSebraeChart').getContext('2d');
-
-            if (charts.balanceWithoutSebrae) charts.balanceWithoutSebrae.destroy();
-            if (charts.balanceWithSebrae) charts.balanceWithSebrae.destroy();
-
-            charts.balanceWithoutSebrae = new Chart(ctxWithout, {
-                type: 'bar',
-                data: {
-                    labels: ['Cenário 1', 'Cenário 2'],
-                    datasets: [{
-                        label: 'Saldo sem SEBRAE',
-                        data: [balances.withoutSebrae.scenario1, balances.withoutSebrae.scenario2],
-                        backgroundColor: ['rgba(234, 88, 12, 0.7)', 'rgba(249, 115, 22, 0.7)'], /* orange-600, orange-500 */
-                        borderColor: ['rgba(234, 88, 12, 1)', 'rgba(249, 115, 22, 1)'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) { return formatCurrency(value); }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            charts.balanceWithSebrae = new Chart(ctxWith, {
-                type: 'bar',
-                data: {
-                    labels: ['Cenário 1', 'Cenário 2'],
-                    datasets: [{
-                        label: 'Saldo com SEBRAE',
-                        data: [balances.withSebrae.scenario1, balances.withSebrae.scenario2],
-                        backgroundColor: ['rgba(22, 163, 74, 0.7)', 'rgba(34, 197, 94, 0.7)'], /* green-600, green-500 */
-                        borderColor: ['rgba(22, 163, 74, 1)', 'rgba(34, 197, 94, 1)'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) { return formatCurrency(value); }
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function setupSidebarNavigation() {
-            const navLinks = document.querySelectorAll('.sidebar-nav a');
-            const sections = document.querySelectorAll('main section');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
-                    const targetId = this.getAttribute('href').substring(1);
-                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
-                });
-            });
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    if (pageYOffset >= sectionTop - sectionHeight / 3) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-
-            // Set active link on initial load
-            const initialHash = window.location.hash;
-            if (initialHash) {
-                const initialLink = document.querySelector(`.sidebar-nav a[href="${initialHash}"]`);
-                if (initialLink) {
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    initialLink.classList.add('active');
-                    document.getElementById(initialHash.substring(1)).scrollIntoView();
-                }
-            } else {
-                document.querySelector('.sidebar-nav a[href="#overview"]').classList.add('active');
-            }
-        }
-    </script>
 </body>
 </html>
