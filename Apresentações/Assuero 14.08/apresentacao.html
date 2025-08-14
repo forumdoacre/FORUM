@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Interativo: Readequação Financeira</title>
+    <title>Convenio com Sebrae e cenário financeiro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -198,6 +198,12 @@
                     <div class="chart-container" style="height:350px;">
                         <canvas id="cashflowChart"></canvas>
                     </div>
+                    <div class="mt-6 p-4 bg-red-100 border-l-4 border-red-500 rounded-r-lg">
+                        <p class="text-lg font-semibold text-red-800">
+                            Aporte ao Convênio: <span class="font-bold">- R$ 50.000,00</span>
+                        </p>
+                        <p class="text-sm text-red-700">Esse aporte do Fórum ao convênio deve ser realizado em novembro.</p>
+                    </div>
                 </div>
             </section>
 
@@ -210,15 +216,15 @@
                 <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-4">Fluxo de Caixa</h3>
                     <ul class="list-disc list-inside space-y-2 text-slate-700">
-                        <li>O fluxo de caixa apresenta um resultado positivo e sustentável de agosto a novembro.</li>
-                        <li>O saldo acumulado nos meses anteriores é suficiente para cobrir o déficit projetado para dezembro.</li>
-                        <li><strong class="text-red-600">Ponto de Atenção:</strong> O mês de dezembro apresenta um déficit de R$ 7.323,00, considerando o pior cenário em que nenhum DEL é renovado.</li>
+                        <li>O fluxo de caixa torna-se criticamente negativo em novembro devido à despesa de aporte de R$ 50.000,00 neste pior cenário em que nenhum contrato DEL é renovado.</li>
+                        <li>O déficit de novembro (<span class="font-semibold text-red-600">-R$ 48.923</span>) somado ao déficit de dezembro (<span class="font-semibold text-red-600">-R$ 7.323</span>) cria uma necessidade de caixa urgente para o final do ano.</li>
+                        <li><strong class="text-red-600">Risco Financeiro:</strong> O aporte cria um déficit substancial.</li>
                     </ul>
 
                     <h3 class="text-xl font-semibold mt-6 mb-4">Conclusões</h3>
                     <ol class="list-decimal list-inside space-y-2 text-slate-700">
                         <li><strong>Cortes:</strong> A readequação do plano de trabalho gerou uma redução total de R$ 379.420,00.</li>
-                        <li><strong>Custo mensal:</strong> O novo custo operacional de R$ 44.823,00 é mais facilmente coberto pelas receitas.</li>
+                        <li><strong>Custo mensal:</strong> O novo custo operacional de R$ 44.823,00 é coberto pelas receitas nos primeiros meses, mas insuficiente para cobrir as despesas extraordinárias.</li>
                         <li><strong>Ações Necessárias:</strong> É crucial trabalhar na renegociação dos contratos e renovação do DEL Turismo com os atuais municípios parceiros.</li>
                     </ol>
                 </div>
@@ -251,8 +257,8 @@
             cashflow: {
                 labels: ['Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
                 revenues: [72980, 62900, 62900, 45900, 37500],
-                expenses: [44823, 44823, 44823, 44823, 44823],
-                balances: [28157, 18077, 18077, 1077, -7323]
+                expenses: [44823, 44823, 44823, 94823, 44823], // Expense in Nov = 44823 + 50000
+                balances: [28157, 18077, 18077, -48923, -7323] // Nov balance: 45900 - 94823
             }
         };
         
@@ -399,7 +405,6 @@
                     maintainAspectRatio: false,
                     scales: {
                         y: {
-                            beginAtZero: true,
                             ticks: {
                                 callback: value => formatCurrency(value)
                             }
