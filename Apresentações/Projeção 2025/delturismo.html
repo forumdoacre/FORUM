@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEL Turismo - Fórum Empresarial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray for a modern feel */
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .section-title {
+            color: #0056b3; /* Darker blue from logo */
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #28a745; /* Green from logo */
+            border-radius: 2px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners for the table container */
+            border: 1px solid #e2e8f0; /* Subtle border around tables */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0; /* Remove default margin */
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 1.25rem 1.5rem; /* Increased padding for better spacing */
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #e9f5ee; /* Light green background for headers */
+            color: #0056b3;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f7fafc; /* Light stripe for readability */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .highlight-row {
+            background-color: #cce7f0 !important; /* Lighter blue for highlight, important to override stripe */
+            font-weight: 700;
+            color: #0056b3;
+            border-top: 2px solid #0056b3; /* Stronger border for totals */
+        }
+        .scenario-card {
+            background-color: #ffffff; /* White background for clarity */
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem; /* Increased padding */
+            margin-bottom: 1.5rem;
+            border: 1px solid #cce7f0;
+            display: flex;
+            flex-direction: column;
+        }
+        .scenario-card.scenario-1 {
+            border-left: 8px solid #007bff; /* Thicker blue border */
+        }
+        .scenario-card.scenario-2 {
+            border-left: 8px solid #28a745; /* Thicker green border */
+        }
+        .value-display {
+            background-color: #e9f5ee; /* Light green for value displays */
+            border: 1px solid #d4edda;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #155724; /* Darker green for text */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+        .value-display .label {
+            font-size: 1rem; /* Slightly larger label */
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .footer {
+            background-color: #0056b3;
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #ffc107; /* Orange/yellow from logo */
+        }
+        .logo-header {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 3rem auto;
+            display: block;
+        }
+        .summary-box {
+            background-color: #d4edda; /* Light green for summary box */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #155724; /* Dark green text */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: auto; /* Push to bottom of scenario card */
+            margin-top: 1.5rem;
+        }
+        .summary-value {
+            font-size: 2.5rem; /* Larger value */
+            font-weight: 800; /* Bolder value */
+            color: #28a745; /* Green for positive values */
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-700 to-green-500 py-8 px-4 text-white text-center rounded-b-3xl shadow-lg">
+        <div class="container">
+            <img src="https://raw.githubusercontent.com/forumdoacre/FORUM/refs/heads/main/Logos/LogoHB.svg" alt="Fórum Empresarial de Inovação e Desenvolvimento Logo" class="logo-header">
+            <h1 class="text-5xl font-bold mb-2">DEL TURISMO</h1>
+            <p class="text-xl font-light">Fórum Empresarial de Inovação e Desenvolvimento do Acre</p>
+        </div>
+    </header>
+
+    <main class="container py-8">
+
+        <!-- Estimativas de Receitas 2025 Section -->
+        <section id="receitas-2025" class="mb-12">
+            <h2 class="section-title">Estimativas de Receitas 2025</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="scenario-card scenario-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Cenário 1: Sem Renovar DEL Acre</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DEL</th>
+                                    <th>Valor Mensal</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 187.500,00</td></tr>
+                                <tr><td>RIO BRANCO</td><td>R$ 17.000,00</td><td>R$ 68.000,00</td></tr>
+                                <tr><td>XAPURI</td><td>R$ 10.080,00</td><td>R$ 20.160,00</td></tr>
+                                <tr><td>EPITACIOLANDIA</td><td>R$ 8.400,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 130.160,00</td></tr>
+                                <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 72.980,00</td><td>R$ 326.060,00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="summary-box">
+                        A Receber de Junho a Dezembro:
+                        <div class="summary-value">R$ 326.060,00</div>
+                    </div>
+                </div>
+
+                <div class="scenario-card scenario-2">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Cenário 2: Renovando Xapuri, Epitaciolândia e Rio Branco</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>DEL</th>
+                                    <th>Valor Mensal</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 187.500,00</td></tr>
+                                <tr><td>RIO BRANCO</td><td>R$ 17.000,00</td><td>R$ 85.000,00</td></tr>
+                                <tr><td>XAPURI</td><td>R$ 10.080,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>EPITACIOLANDIA</td><td>R$ 8.400,00</td><td>R$ 50.400,00</td></tr>
+                                <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 177.400,00</td></tr>
+                                <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 72.980,00</td><td>R$ 373.300,00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="summary-box">
+                        A Receber de Junho a Dezembro:
+                        <div class="summary-value">R$ 373.300,00</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Despesas Previstas Section -->
+        <section id="despesas-previstas" class="mb-12">
+            <h2 class="section-title">Previsão Mensal de Despesas DEL</h2>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Despesas Mensais</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Pagamento Consultor - DEL Amapá</td><td>R$ 13.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Rio Branco</td><td>R$ 5.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Xapuri</td><td>R$ 4.800,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Epitaciolândia</td><td>R$ 4.000,00</td></tr>
+                            <tr><td>Diária Acre - Consultor</td><td>R$ 2.100,00</td></tr>
+                            <tr><td>Diária Acre - Motorista</td><td>R$ 475,00</td></tr>
+                            <tr><td>Passagens mensais AC e Amapá</td><td>R$ 5.500,00</td></tr>
+                            <tr><td>Combustível</td><td>R$ 1.500,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 36.375,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Previsão de Julho a Dezembro de 2025 Section -->
+        <section id="previsao-jul-dez-2025" class="mb-12">
+            <h2 class="section-title">Previsão de Julho a Dezembro de 2025 - Orçamento DEL Turismo</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Receitas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Cenário 1</th>
+                                <th>Cenário 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>RECEITA JULHO A DEZEMBRO/25</td><td>R$ 326.060,00</td><td>R$ 373.300,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 326.060,00</td><td>R$ 373.300,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">OBS Cenário 1: -21.775, -4.475 e -10.350 referente a Xapuri, Epitaciolândia e Rio Branco.</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Despesas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Cenário 1</th>
+                                <th>Cenário 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (ago/25 a dez/25) (Descontado proporcionalmente diárias e pagamentos)</td><td>R$ 145.275,00</td><td>R$ 181.875,00</td></tr>
+                            <tr><td>VIAGEM TÍSSIA AMAPÁ (out/25)</td><td>R$ 9.600,00</td><td>R$ 9.600,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 154.875,00</td><td>R$ 191.475,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                    <div class="value-display col-span-full md:col-span-1">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 36.605,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo ao Final de 2025 (Cenário 1)</span>
+                        <span>R$ 171.185,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo ao Final de 2025 (Cenário 2)</span>
+                        <span>R$ 181.825,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEL TURISMO 2026 Section -->
+        <section id="del-turismo-2026" class="mb-12">
+            <h2 class="section-title">DEL TURISMO 2026</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Estimativas de Receitas - 2026</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DEL</th>
+                                <th>Valor Mensal</th>
+                                <th>Total Anual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DEL AMAPÁ</td><td>R$ 37.500,00</td><td>R$ 450.000,00</td></tr>
+                            <tr><td>DEL ACRE</td><td>R$ 35.480,00</td><td>R$ 425.760,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 72.980,00</td><td>R$ 875.760,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Despesas</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Despesas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (jan/26 a dez/26)</td><td>R$ 436.500,00</td></tr>
+                            <tr><td>3 VIAGENS TÍSSIA AMAPÁ (abril, agosto e dez/26)</td><td>R$ 28.800,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 465.300,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="value-display">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 36.605,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo 2026</span>
+                        <span>R$ 410.460,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEL TURISMO JURUÁ Section -->
+        <section id="del-turismo-jurua" class="mb-12">
+            <h2 class="section-title">DEL TURISMO JURUÁ</h2>
+            <div class="card">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Estimativas de Receitas Juruá</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DEL</th>
+                                <th>Valor Mensal</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CRUZEIRO DO SUL</td><td>R$ 17.000,00</td><td>R$ 204.000,00</td></tr>
+                            <tr><td>RODRIGUES ALVES</td><td>R$ 12.500,00</td><td>R$ 150.000,00</td></tr>
+                            <tr><td>MÂNCIO LIMA</td><td>R$ 12.500,00</td><td>R$ 150.000,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL</td><td>R$ 42.000,00</td><td>R$ 504.000,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="value-display mt-8">
+                    <span class="label">A Receber</span>
+                    <span>R$ 500.000,00</span>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Previsão Mensal de Despesas DEL Juruá</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Despesas Mensais</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Pagamento Consultor - DEL Cruzeiro do Sul</td><td>R$ 5.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Rodrigues Alves</td><td>R$ 4.500,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Mâncio Lima</td><td>R$ 4.500,00</td></tr>
+                            <tr><td>Diária Consultor</td><td>R$ 2.450,00</td></tr>
+                            <tr><td>Diária Motorista</td><td>R$ 2.225,00</td></tr>
+                            <tr><td>Combustível</td><td>R$ 2.000,00</td></tr>
+                            <tr class="highlight-row"><td>DESPESA TOTAL MENSAL</td><td>R$ 20.675,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">Previsão Anual Juruá - Orçamento DEL Turismo</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Receitas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>RECEITA JANEIRO A DEZEMBRO/26</td><td>R$ 504.000,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL</td><td>R$ 504.000,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container mt-4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Despesas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DESPESA MENSAL DEL (jan/26 a dez/26)</td><td>R$ 248.100,00</td></tr>
+                            <tr><td>3 PASSAGENS TÍSSIA (jan/jul/nov/26)</td><td>R$ 6.000,00</td></tr>
+                            <tr><td>DIÁRIAS TÍSSIA</td><td>R$ 8.100,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL GERAL COM CONVÊNIO</td><td>R$ 262.200,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="value-display">
+                        <span class="label">Saldo Mensal</span>
+                        <span>R$ 21.325,00</span>
+                    </div>
+                    <div class="value-display">
+                        <span class="label">Saldo 2026</span>
+                        <span>R$ 241.800,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2025 FÓRUM EMPRESARIAL de Inovação e Desenvolvimento. Todos os direitos reservados.</p>
+        <p class="mt-2">
+            <a href="#receitas-2025">Receitas</a> |
+            <a href="#despesas-previstas">Despesas</a> |
+            <a href="#del-turismo-2026">DEL 2026</a> |
+            <a href="#del-turismo-jurua">DEL Juruá</a>
+        </p>
+    </footer>
+
+</body>
+</html>
