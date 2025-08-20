@@ -6,10 +6,11 @@
     <title>Convenio com Sebrae e cenário financeiro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals (Stone, Gray, Sky Blue) -->
     <!-- Application Structure Plan: A tab-based single-page dashboard. Sections: Visão Geral (key metrics), Plano de Trabalho (budget changes chart), Análise Financeira (expense & cash flow charts), and Conclusões. This structure provides a high-level overview first, then allows users to explore specific areas, which is more intuitive and efficient than a linear presentation. -->
-    <!-- Visualization & Content Choices: 1. Total Budget: Bar chart (Goal: Compare old/new, Interaction: Hover, Justification: Clear visual of reduction, Lib: Chart.js). 2. Monthly Expenses: Detailed HTML table (Goal: Compare with/without agreement, Justification: Provides granular detail requested by user, Lib: HTML/Tailwind). 3. Cash Flow: Combo Bar/Line chart (Goal: Show trend, Interaction: Hover, Justification: Best for comparing different data types over time, Lib: Chart.js). 4. Key Metrics: Styled cards (Goal: Inform, Justification: Quick-glance info, Lib: HTML/Tailwind). -->
+    <!-- Visualization & Content Choices: 1. Total Budget: Bar chart (Goal: Compare old/new, Interaction: Hover, Justification: Clear visual of reduction, Lib: Chart.js). 2. Monthly Expenses: Detailed HTML table (Goal: Compare with/without agreement, Justification: Provides granular detail requested by user, Lib: HTML/Tailwind). 3. Cash Flow: Combo Bar/Line chart (Goal: Show trend, Interaction: Hover with custom tooltips for details, Justification: Best for comparing different data types over time, Lib: Chart.js). 4. Key Metrics: Styled cards (Goal: Inform, Justification: Quick-glance info, Lib: HTML/Tailwind). -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -19,11 +20,11 @@
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             margin-left: auto;
             margin-right: auto;
-            height: 400px;
-            max-height: 50vh;
+            height: 450px;
+            max-height: 60vh;
         }
         .nav-btn {
             transition: all 0.3s ease;
@@ -75,7 +76,7 @@
 
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Readequação do Plano de Trabalho do Convênio com o Sebrae e Cenário Financeiro de 2025</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Cenário Financeiro com Convênio Sebrae</h1>
             <p class="text-slate-600 mt-2">Análise do convênio com o Sebrae e projeções para 2025</p>
         </header>
 
@@ -111,7 +112,7 @@
                 </div>
             </section>
 
-            <!-- Plano de Trabalho Section -->
+             <!-- Plano de Trabalho Section -->
             <section id="content-plan" class="content-section">
                  <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Alterações no Plano de Trabalho</h2>
@@ -123,38 +124,43 @@
                         <canvas id="budgetChart"></canvas>
                     </div>
                 </div>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-semibold mb-4">Principais Reduções</h3>
-                        <ul class="space-y-4">
-                            <li>
-                                <strong class="text-red-600">Meta 11 Removida:</strong>
-                                <p class="text-sm text-slate-600">"Realizar eventos estratégicos que promovam os produtos industrializados de origem acreana, valorizando sua qualidade, origem, sustentabilidade e identidade cultural"</p>
-                                <p class="font-semibold">- R$ 225.000,00</p>
-                            </li>
-                             <li>
-                                <strong class="text-red-600">Meta 7 Reduzida:</strong>
-                                <p class="text-sm text-slate-600">"Criar campanhas de marketing para divulgar os produtos acreanos, destacando seus diferenciais, como a qualidade, a origem e a sustentabilidade"</p>
-                                Despesa "Divulgação, anúncio, publicidade e propaganda": redução de 18 para 8 meses
-                                <p class="font-semibold">- R$ 249.280,00</p>
-                            </li>
-                        </ul>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Reestruturação das Metas</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Fusão e Redução de Metas</h4>
+                                <div class="p-4 bg-slate-100 rounded-lg">
+                                    <p class="text-slate-700">A <strong class="text-slate-900">Meta 8</strong> (Eventos estratégicos, R$ 297.600) foi fundida com a <strong class="text-slate-900">Meta 11</strong> (Divulgação de produtos, R$ 225.000), resultando na nova <strong class="text-sky-600">Meta 10</strong> (R$ 322.760).</p>
+                                    <li class="p-4 rounded-lg">
+                                        <strong class="text-slate-900">Nova Meta 10:</strong> A despesa "Serviços profissionais - Aluguéis e encargos" foi reduzida de 18 meses (valor unitário R$ 8.500) para <strong>8 meses</strong>.
+                                    </li>
+                                    <p class="mt-2 font-semibold text-red-600">Redução na fusão: - R$ 199.840,00</p>
+                                </div>
+                                <h4 class="text-lg font-semibold mt-6 mb-2">Redução de Despesas Específicas</h4>
+                                <div class="p-4 bg-slate-100 rounded-lg">
+                                    <li class="bg-slate-100 rounded-lg">
+                                        <strong class="text-slate-900">Meta 7:</strong> A despesa "Divulgação, anúncio, publicidade e propaganda" foi reduzida de 18 meses (valor unitário R$ 25.000) para <strong>8 meses</strong>.
+                                        <p class="mt-2 font-semibold text-red-600">Redução:- R$ 249.280,00</p>
+                                    </li>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Valores Redistribuídos</h4>
+                                <div class="p-4 bg-slate-100 rounded-lg">
+                                    <ul class="space-y-2 text-sm text-slate-700">
+                                        <li><strong>Meta 1:</strong> + R$ 2.450,00</li>
+                                        <li><strong>Meta 2:</strong> + R$ 300,00</li>
+                                        <li><strong>Meta 4:</strong> + R$ 9.800,00</li>
+                                        <li><strong>Meta 5:</strong> + R$ 1.350,00</li>
+                                        <li><strong>Meta 6:</strong> + R$ 9.000,00</li>
+                                        <li><strong>Meta 8:</strong> + R$ 900,00</li>
+                                        <li><strong>Meta 9:</strong> + R$ 45.900,00</li>
+                                        <li class="font-bold pt-2 border-t mt-2"><strong>Total Redistribuído:</strong> R$ 69.700,00</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-semibold mb-4">Valores Redistribuídos</h3>
-                        <ul class="space-y-2 text-sm text-slate-700">
-                            <li><strong>Meta 1:</strong> + R$ 2.450,00</li>
-                            <li><strong>Meta 2:</strong> + R$ 300,00</li>
-                            <li><strong>Meta 4:</strong> + R$ 9.800,00</li>
-                            <li><strong>Meta 5:</strong> + R$ 1.350,00</li>
-                            <li><strong>Meta 6:</strong> + R$ 9.000,00</li>
-                            <li><strong>Meta 8:</strong> + R$ 900,00</li>
-                            <li><strong>Meta 9:</strong> + R$ 45.900,00</li>
-                            <li><strong>Meta 10:</strong> + R$ 25.160,00</li>
-                            <li class="font-bold pt-2 border-t mt-2"><strong>Total Redistribuído:</strong> R$ 94.860,00</li>
-                        </ul>
-                    </div>
-                </div>
             </section>
 
             <!-- Análise Financeira Section -->
@@ -194,38 +200,54 @@
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-center mb-4">Projeção de Fluxo de Caixa (Ago-Dez 2025)</h3>
-                    <div class="chart-container" style="height:350px;">
+                    <h3 class="text-xl font-semibold text-center mb-4">Projeção de Fluxo de Caixa com Saldo Acumulado</h3>
+                    <div class="text-center mb-4">
+                        <span class="text-slate-600">Saldo Inicial (20 de agosto):</span>
+                        <span id="initial-balance" class="font-bold text-lg text-slate-800"></span>
+                    </div>
+                    <div class="chart-container">
                         <canvas id="cashflowChart"></canvas>
                     </div>
-                    <div class="mt-6 p-4 bg-red-100 border-l-4 border-red-500 rounded-r-lg">
-                        <p class="text-lg font-semibold text-red-800">
-                            Aporte ao Convênio: <span class="font-bold">- R$ 50.000,00</span>
-                        </p>
-                        <p class="text-sm text-red-700">Esse aporte do Fórum ao convênio deve ser realizado em novembro.</p>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Grande Despesa (Agosto)</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 45.000,00</p>
+                            <p class="text-sm text-red-700">Pagamento FUNDAPE</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Grande Despesa (Novembro)</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 50.000,00</p>
+                            <p class="text-sm text-red-700">Aporte ao Convênio</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-semibold text-green-800">Saldo Final Previsto (Dez)</h4>
+                            <p id="final-balance" class="text-lg font-bold text-green-600"></p>
+                            <p class="text-sm text-green-700">Acumulado ao final do ano</p>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Conclusões Section -->
+            <!-- Conclusões Section -->
             <section id="content-conclusion" class="content-section">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Análise e Conclusões</h2>
-                    <p class="text-slate-500 mt-1">Principais pontos</p>
+                    <p class="text-slate-500 mt-1">Principais pontos do cenário financeiro projetado.</p>
                 </div>
                 <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-4">Fluxo de Caixa</h3>
-                    <ul class="list-disc list-inside space-y-2 text-slate-700">
-                        <li>O fluxo de caixa torna-se criticamente negativo em novembro devido à despesa de aporte de R$ 50.000,00 neste pior cenário em que nenhum contrato DEL é renovado.</li>
-                        <li>O déficit de novembro (<span class="font-semibold text-red-600">-R$ 48.923</span>) somado ao déficit de dezembro (<span class="font-semibold text-red-600">-R$ 7.323</span>) cria uma necessidade de caixa urgente para o final do ano.</li>
-                        <li><strong class="text-red-600">Risco Financeiro:</strong> O aporte cria um déficit substancial.</li>
+                    <h3 class="text-xl font-semibold mb-4">Análise do Fluxo de Caixa</h3>
+                    <ul class="list-disc list-inside space-y-3 text-slate-700">
+                        <li>O mês de agosto é o único com resultado negativo devdo ao pagamento da FUNDAPE e a falta do efetivo impacto do Convênio com Sebrae, que só ocorrerá em Setembro.</li>
+                        <li>A situação se torna mais estável em setembro e outubro com o impacto do convênio, permitindo a recuperação do saldo acumulado.</li>
+                        <li><strong class="text-slate-800">Novembro é um mês-chave:</strong> apesar da despesa do aporte ao convênio, a devolução de valores pelo IEL reverter o cenário e impulsiona o caixa para um patamar positivo e seguro.</li>
+                        <li>O ano encerra com um <strong class="text-green-600">saldo acumulado positivo</strong>, demonstrando resiliência e recuperação financeira.</li>
                     </ul>
 
                     <h3 class="text-xl font-semibold mt-6 mb-4">Conclusões</h3>
-                    <ol class="list-decimal list-inside space-y-2 text-slate-700">
-                        <li><strong>Cortes:</strong> A readequação do plano de trabalho gerou uma redução total de R$ 379.420,00.</li>
-                        <li><strong>Custo mensal:</strong> O novo custo operacional de R$ 44.823,00 é coberto pelas receitas nos primeiros meses, mas insuficiente para cobrir as despesas extraordinárias.</li>
-                        <li><strong>Ações Necessárias:</strong> É crucial trabalhar na renegociação dos contratos e renovação do DEL Turismo com os atuais municípios parceiros.</li>
+                    <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                        <li><strong>Eficiência nos Custos:</strong> A redução de despesas foi fundamental para tornar a operação mensal sustentável e viabilizar a recuperação do caixa.</li>
+                        <li><strong>Cenário Sustentável:</strong> Com o saldo positivo ao final do ano, o Fórum se encontra em uma posição financeira estável para iniciar o próximo período, mas o monitoramento contínuo das receitas e despesas continua sendo essencial.</li>
                     </ol>
                 </div>
             </section>
@@ -241,6 +263,7 @@
             initialTotal: 2669600,
             newTotal: 2290180,
             totalReduction: -379420,
+            monthlySavings: 35979.30,
             detailedExpenses: [
                 { label: 'Equipe Fórum (Stefani Diferença)', withAgreement: 1400, withoutAgreement: 37379.30 },
                 { label: 'Consultor DEL - Contrato e Diária', withAgreement: 29800, withoutAgreement: 29800 },
@@ -255,13 +278,79 @@
                 { label: 'Material de Expediente e Outros', withAgreement: 600, withoutAgreement: 600 },
             ],
             cashflow: {
-                labels: ['Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                revenues: [72980, 62900, 62900, 45900, 37500],
-                expenses: [44823, 44823, 44823, 94823, 44823], // Expense in Nov = 44823 + 50000
-                balances: [28157, 18077, 18077, -48923, -7323] // Nov balance: 45900 - 94823
+                initialBalance: 88071.3,
+                months: [
+                    {
+                        month: 'Agosto',
+                        revenues: { total: 91460, details: [
+                            { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
+                            { source: 'DEL Turismo - Xapuri', value: 10080 },
+                            { source: 'DEL Turismo - Rio Branco', value: 17000 },
+                            { source: 'DEL Turismo - Amapá', value: 37500 },
+                            { source: 'A receber de Julho (Epitaciolândia e Xapuri)', value: 18480 }
+                        ]},                        expenses: { total: 120645.45, details: [
+                            { source: 'Fórum', value: 75645.45 },
+                            { source: 'FUNDAPE', value: 45000 }
+                        ]}
+                    },
+                    {
+                        month: 'Setembro',
+                        revenues: { total: 62900, details: [
+                            { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
+                            { source: 'DEL Turismo - Rio Branco', value: 17000 },
+                            { source: 'DEL Turismo - Amapá', value: 37500 }
+                        ]},
+                        expenses: { total: 44823, details: [
+                            { source: 'Fórum', value: 44823 }
+                        ]}
+                    },
+                    {
+                        month: 'Outubro',
+                        revenues: { total: 62900, details: [
+                            { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
+                            { source: 'DEL Turismo - Rio Branco', value: 17000 },
+                            { source: 'DEL Turismo - Amapá', value: 37500 }
+                        ]},
+                        expenses: { total: 44823, details: [
+                            { source: 'Fórum', value: 44823 }
+                        ]}
+                    },
+                    {
+                        month: 'Novembro',
+                        revenues: { total: 125900, details: [
+                            { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
+                            { source: 'DEL Turismo - Rio Branco', value: 17000 },
+                            { source: 'DEL Turismo - Amapá', value: 37500 },
+                            { source: 'DEVOLUÇÃO IEL', value: 63000 }
+                        ]},
+                        expenses: { total: 94823, details: [
+                            { source: 'Fórum', value: 44823 },
+                            { source: 'Aporte Convênio', value: 50000 }
+                        ]}
+                    },
+                    {
+                        month: 'Dezembro',
+                        revenues: { total: 62900, details: [
+                            { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
+                            { source: 'DEL Turismo - Rio Branco', value: 17000 },
+                            { source: 'DEL Turismo - Amapá', value: 37500 }
+                        ]},
+                        expenses: { total: 44823, details: [
+                            { source: 'Fórum', value: 44823 }
+                        ]}
+                    }
+                ]
             }
         };
         
+        // Calculate cumulative balance
+        let cumulativeBalance = data.cashflow.initialBalance;
+        const cumulativeBalances = data.cashflow.months.map(m => {
+            const monthlyBalance = m.revenues.total - m.expenses.total;
+            cumulativeBalance += monthlyBalance;
+            return cumulativeBalance;
+        });
+
         const totalWithAgreement = data.detailedExpenses.reduce((sum, item) => sum + item.withAgreement, 0);
         const totalWithoutAgreement = data.detailedExpenses.reduce((sum, item) => sum + item.withoutAgreement, 0);
         const monthlySavings = totalWithoutAgreement - totalWithAgreement;
@@ -270,8 +359,14 @@
             
             document.getElementById('kpi-reduction').textContent = formatCurrency(data.totalReduction);
             document.getElementById('kpi-new-total').textContent = formatCurrency(data.newTotal);
-            document.getElementById('kpi-monthly-reduction').textContent = formatCurrency(monthlySavings);
-            
+            document.getElementById('kpi-monthly-reduction').textContent = formatCurrency(data.monthlySavings);
+            document.getElementById('initial-balance').textContent = formatCurrency(data.cashflow.initialBalance);
+            document.getElementById('final-balance').textContent = formatCurrency(cumulativeBalances[cumulativeBalances.length - 1]);
+            document.getElementById('monthly-savings').textContent = formatCurrency(monthlySavings);
+
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
             const expenseTableBody = document.getElementById('expense-table-body');
             data.detailedExpenses.forEach(item => {
                 const row = document.createElement('tr');
@@ -284,27 +379,11 @@
                 expenseTableBody.appendChild(row);
             });
 
-            document.getElementById('total-with-agreement').textContent = formatCurrency(totalWithAgreement);
-            document.getElementById('total-without-agreement').textContent = formatCurrency(totalWithoutAgreement);
-            document.getElementById('monthly-savings').textContent = formatCurrency(monthlySavings);
-
-
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const contentSections = document.querySelectorAll('.content-section');
-
             const switchTab = (tabId) => {
-                navButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.id === `nav-${tabId}`) {
-                        btn.classList.add('active');
-                    }
-                });
-                contentSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === `content-${tabId}`) {
-                        section.classList.add('active');
-                    }
-                });
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                document.getElementById(`nav-${tabId}`).classList.add('active');
+                document.getElementById(`content-${tabId}`).classList.add('active');
             };
 
             navButtons.forEach(button => {
@@ -314,21 +393,6 @@
                 });
             });
             
-            const tooltipCurrency = {
-                callbacks: {
-                    label: function(context) {
-                        let label = context.dataset.label || '';
-                        if (label) {
-                            label += ': ';
-                        }
-                        if (context.parsed.y !== null) {
-                            label += formatCurrency(context.parsed.y);
-                        }
-                        return label;
-                    }
-                }
-            };
-
             const budgetCtx = document.getElementById('budgetChart').getContext('2d');
             new Chart(budgetCtx, {
                 type: 'bar',
@@ -339,64 +403,52 @@
                             label: 'Valor Inicial',
                             data: [data.initialTotal],
                             backgroundColor: '#94a3b8', // slate-400
-                            borderColor: '#64748b', // slate-500
-                            borderWidth: 1
                         },
                         {
                             label: 'Valor Atual',
                             data: [data.newTotal],
                             backgroundColor: '#38bdf8', // sky-400
-                            borderColor: '#0ea5e9', // sky-500
-                            borderWidth: 1
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: value => formatCurrency(value)
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: { position: 'top' },
-                        tooltip: tooltipCurrency
-                    }
+                    scales: { y: { ticks: { callback: value => formatCurrency(value) } } },
+                    plugins: { legend: { position: 'top' } }
                 }
             });
+
 
             const cashflowCtx = document.getElementById('cashflowChart').getContext('2d');
             new Chart(cashflowCtx, {
                 type: 'bar',
                 data: {
-                    labels: data.cashflow.labels,
+                    labels: data.cashflow.months.map(m => m.month),
                     datasets: [
                         {
-                            label: 'Receitas Previstas',
-                            data: data.cashflow.revenues,
+                            label: 'Receitas',
+                            data: data.cashflow.months.map(m => m.revenues.total),
                             backgroundColor: '#38bdf8', // sky-400
+                            order: 2
                         },
                         {
-                            label: 'Saldo Mensal',
-                            data: data.cashflow.balances,
-                            backgroundColor: (context) => {
-                                const value = context.dataset.data[context.dataIndex];
-                                return value >= 0 ? '#4ade80' : '#f87171'; // green-400 or red-400
-                            },
+                            label: 'Despesas',
+                            data: data.cashflow.months.map(m => m.expenses.total),
+                            backgroundColor: '#f87171', // red-400
+                            order: 2
                         },
                          {
-                            label: 'Despesas Mensais',
-                            data: data.cashflow.expenses,
+                            label: 'Saldo Acumulado',
+                            data: cumulativeBalances,
                             type: 'line',
-                            borderColor: '#f43f5e', // rose-500
-                            backgroundColor: '#f43f5e',
+                            borderColor: '#22c55e', // green-500
+                            backgroundColor: '#22c55e',
                             tension: 0.1,
-                            borderWidth: 2,
-                            pointRadius: 3,
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            order: 1
                         }
                     ]
                 },
@@ -411,12 +463,35 @@
                         }
                     },
                     plugins: {
-                        legend: { position: 'top' },
-                        tooltip: tooltipCurrency
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                footer: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const monthData = data.cashflow.months[index];
+                                    
+                                    let revenueDetails = monthData.revenues.details.map(d => `  + ${d.source}: ${formatCurrency(d.value)}`).join('\\n');
+                                    let expenseDetails = monthData.expenses.details.map(d => `  - ${d.source}: ${formatCurrency(d.value)}`).join('\\n');
+
+                                    const prevBalance = index > 0 ? cumulativeBalances[index - 1] : data.cashflow.initialBalance;
+                                    const monthlyBalance = monthData.revenues.total - monthData.expenses.total;
+
+                                    let details = ['\\n--- Detalhamento ---'];
+                                    details.push('Receitas:');
+                                    details.push(revenueDetails);
+                                    details.push('\\nDespesas:');
+                                    details.push(expenseDetails);
+                                    details.push('\\n--- Saldo do Mês ---');
+                                    details.push(`Saldo Anterior: ${formatCurrency(prevBalance)}`);
+                                    details.push(`Resultado do Mês: ${formatCurrency(monthlyBalance)}`);
+                                    
+                                    return details.join('\\n').split('\\n');
+                                }
+                            }
+                        }
                     }
                 }
             });
-
         });
     </script>
 </body>
