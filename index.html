@@ -202,13 +202,18 @@
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-center mb-4">Projeção de Fluxo de Caixa com Saldo Acumulado</h3>
                     <div class="text-center mb-4">
-                        <span class="text-slate-600">Saldo Inicial (20 de agosto):</span>
+                        <span class="text-slate-600">Saldo atual (20 de agosto):</span>
                         <span id="initial-balance" class="font-bold text-lg text-slate-800"></span>
                     </div>
                     <div class="chart-container">
                         <canvas id="cashflowChart"></canvas>
                     </div>
-                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Grande Despesa (Agosto)</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 25.000,00</p>
+                            <p class="text-sm text-red-700">Treinamento para o Fórum</p>
+                        </div>
                         <div class="p-4 bg-red-50 rounded-lg">
                             <h4 class="font-semibold text-red-800">Grande Despesa (Agosto)</h4>
                             <p class="text-lg font-bold text-red-600">- R$ 45.000,00</p>
@@ -228,7 +233,6 @@
                 </div>
             </section>
 
-            <!-- Conclusões Section -->
             <!-- Conclusões Section -->
             <section id="content-conclusion" class="content-section">
                 <div class="text-center mb-8">
@@ -282,14 +286,15 @@
                 months: [
                     {
                         month: 'Agosto',
-                        revenues: { total: 91460, details: [
+                        revenues: { total: 161460.00, details: [
                             { source: 'DEL Turismo - Epitaciolândia', value: 8400 },
                             { source: 'DEL Turismo - Xapuri', value: 10080 },
                             { source: 'DEL Turismo - Rio Branco', value: 17000 },
                             { source: 'DEL Turismo - Amapá', value: 37500 },
+                            { source: 'PAGAMENTO Consultoria Fórum ExpoJuruá 2025', value: 70000 },
                             { source: 'A receber de Julho (Epitaciolândia e Xapuri)', value: 18480 }
-                        ]},                        expenses: { total: 120645.45, details: [
-                            { source: 'Fórum', value: 75645.45 },
+                        ]},                        expenses: { total: 145645.45, details: [
+                            { source: 'Fórum', value: 100645.45 },
                             { source: 'FUNDAPE', value: 45000 }
                         ]}
                     },
@@ -357,6 +362,9 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             
+            document.getElementById('total-with-agreement').textContent = formatCurrency(totalWithAgreement);
+            document.getElementById('total-without-agreement').textContent = formatCurrency(totalWithoutAgreement);
+
             document.getElementById('kpi-reduction').textContent = formatCurrency(data.totalReduction);
             document.getElementById('kpi-new-total').textContent = formatCurrency(data.newTotal);
             document.getElementById('kpi-monthly-reduction').textContent = formatCurrency(data.monthlySavings);
