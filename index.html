@@ -208,26 +208,31 @@
                     <div class="chart-container">
                         <canvas id="cashflowChart"></canvas>
                     </div>
-                    <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
                         <div class="p-4 bg-red-50 rounded-lg">
-                            <h4 class="font-semibold text-red-800">Grande Despesa (Agosto)</h4>
+                            <h4 class="font-semibold text-red-800">Treinamento para o Fórum</h4>
                             <p class="text-lg font-bold text-red-600">- R$ 25.000,00</p>
-                            <p class="text-sm text-red-700">Treinamento para o Fórum</p>
+                            <p class="text-sm text-red-700">A ser pago em Agosto</p>
                         </div>
                         <div class="p-4 bg-red-50 rounded-lg">
-                            <h4 class="font-semibold text-red-800">Grande Despesa (Agosto)</h4>
+                            <h4 class="font-semibold text-red-800">FUNDAPE</h4>
                             <p class="text-lg font-bold text-red-600">- R$ 45.000,00</p>
-                            <p class="text-sm text-red-700">Pagamento FUNDAPE</p>
+                            <p class="text-sm text-red-700">A ser pago em Agosto</p>
                         </div>
                         <div class="p-4 bg-red-50 rounded-lg">
-                            <h4 class="font-semibold text-red-800">Grande Despesa (Novembro)</h4>
+                            <h4 class="font-semibold text-red-800">Aporte ao Convênio</h4>
                             <p class="text-lg font-bold text-red-600">- R$ 50.000,00</p>
-                            <p class="text-sm text-red-700">Aporte ao Convênio</p>
+                            <p class="text-sm text-red-700">A ser pago em Novembro</p>
                         </div>
                         <div class="p-4 bg-green-50 rounded-lg">
                             <h4 class="font-semibold text-green-800">Saldo Final Previsto (Dez)</h4>
                             <p id="final-balance" class="text-lg font-bold text-green-600"></p>
                             <p class="text-sm text-green-700">Acumulado ao final do ano</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Aporte ao Convênio</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 120.000,00</p>
+                            <p class="text-sm text-red-700">A ser pago em Março/2026</p>
                         </div>
                     </div>
                 </div>
@@ -326,6 +331,24 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <div class="mt-4 p-4 bg-sky-100 border-l-4 border-sky-500 rounded-r-lg">
+                        <p class="text-lg font-semibold text-sky-800">
+                            Custo mensal (Fórum): <span class="font-bold">R$ 7.000,00</span>
+                        </p>
+                        <p class="text-sm text-sky-700">Custo anual: R$ 84.000,00</p>
+                    </div>
+                    <div class="mt-4 p-4 bg-sky-100 border-l-4 border-sky-500 rounded-r-lg">
+                        <p class="text-lg font-semibold text-sky-800">
+                            Custo mensal (Sebrae): <span class="font-bold">R$ 15.406,11</span>
+                        </p>
+                        <p class="text-sm text-sky-700">Custo anual: R$ 184.873,33</p>
+                    </div>                    
+                    <div class="mt-4 p-4 bg-sky-100 border-l-4 border-sky-500 rounded-r-lg">
+                        <p class="text-lg font-semibold text-sky-800">
+                            Custo mensal (Seplan): <span class="font-bold">R$ 21.102,40</span>
+                        </p>
+                        <p class="text-sm text-sky-700">Custo anual: R$ 253.228,80</p>
+                    </div>
                 </div>
             </section>
         </main>
@@ -342,7 +365,7 @@
             totalReduction: -379420,
             monthlySavings: 35979.30,
             detailedExpenses: [
-                { label: 'Equipe Fórum', withAgreement: 1400, withoutAgreement: 43508.51 },
+                { label: 'Equipe Fórum', withAgreement: 7000, withoutAgreement: 43508.51 },
                 { label: 'Consultor DEL - Contrato e Diária', withAgreement: 29800, withoutAgreement: 29800 },
                 { label: 'Passagem Estácio DEL Acre', withAgreement: 3000, withoutAgreement: 3000 },
                 { label: 'Passagem Estácio DEL Amapá', withAgreement: 2500, withoutAgreement: 2500 },
@@ -377,8 +400,8 @@
                             { source: 'DEL Turismo - Rio Branco', value: 17000 },
                             { source: 'DEL Turismo - Amapá', value: 37500 }
                         ]},
-                        expenses: { total: 44823, details: [
-                            { source: 'Fórum', value: 44823 }
+                        expenses: { total: 50423.00, details: [
+                            { source: 'Fórum', value: 50423.00 }
                         ]}
                     },
                     {
@@ -388,8 +411,8 @@
                             { source: 'DEL Turismo - Rio Branco', value: 17000 },
                             { source: 'DEL Turismo - Amapá', value: 37500 }
                         ]},
-                        expenses: { total: 44823, details: [
-                            { source: 'Fórum', value: 44823 }
+                        expenses: { total: 50423.00, details: [
+                            { source: 'Fórum', value: 50423.00 }
                         ]}
                     },
                     {
@@ -400,8 +423,8 @@
                             { source: 'DEL Turismo - Amapá', value: 37500 },
                             { source: 'DEVOLUÇÃO IEL', value: 63000 }
                         ]},
-                        expenses: { total: 94823, details: [
-                            { source: 'Fórum', value: 44823 },
+                        expenses: { total: 100423.00, details: [
+                            { source: 'Fórum', value: 50423.00 },
                             { source: 'Aporte Convênio', value: 50000 }
                         ]}
                     },
@@ -412,8 +435,8 @@
                             { source: 'DEL Turismo - Rio Branco', value: 17000 },
                             { source: 'DEL Turismo - Amapá', value: 37500 }
                         ]},
-                        expenses: { total: 44823, details: [
-                            { source: 'Fórum', value: 44823 }
+                        expenses: { total: 50423.00, details: [
+                            { source: 'Fórum', value: 50423.00 }
                         ]}
                     }
                 ]
