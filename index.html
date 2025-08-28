@@ -8,10 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals (Stone, Gray, Sky Blue) -->
-    <!-- Application Structure Plan: A tab-based single-page dashboard. Sections: Visão Geral (key metrics), Plano de Trabalho (budget changes chart), Análise Financeira (expense & cash flow charts), and Conclusões. This structure provides a high-level overview first, then allows users to explore specific areas, which is more intuitive and efficient than a linear presentation. -->
-    <!-- Visualization & Content Choices: 1. Total Budget: Bar chart (Goal: Compare old/new, Interaction: Hover, Justification: Clear visual of reduction, Lib: Chart.js). 2. Monthly Expenses: Detailed HTML table (Goal: Compare with/without agreement, Justification: Provides granular detail requested by user, Lib: HTML/Tailwind). 3. Cash Flow: Combo Bar/Line chart (Goal: Show trend, Interaction: Hover with custom tooltips for details, Justification: Best for comparing different data types over time, Lib: Chart.js). 4. Key Metrics: Styled cards (Goal: Inform, Justification: Quick-glance info, Lib: HTML/Tailwind). -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -86,11 +82,12 @@
                 <button id="nav-plan" class="nav-btn text-sm md:text-base font-medium py-2 px-4 rounded-t-lg border-b-2 border-transparent">Plano de Trabalho</button>
                 <button id="nav-analysis" class="nav-btn text-sm md:text-base font-medium py-2 px-4 rounded-t-lg border-b-2 border-transparent">Análise Financeira</button>
                 <button id="nav-conclusion" class="nav-btn text-sm md:text-base font-medium py-2 px-4 rounded-t-lg border-b-2 border-transparent">Equipe</button>
+                <button id="nav-metas" class="nav-btn text-sm md:text-base font-medium py-2 px-4 rounded-t-lg border-b-2 border-transparent">Metas do Convênio</button>
+                <button id="nav-seplan" class="nav-btn text-sm md:text-base font-medium py-2 px-4 rounded-t-lg border-b-2 border-transparent">Convênio SEPLAN</button>
             </div>
         </nav>
 
         <main>
-            <!-- Visão Geral Section -->
             <section id="content-overview" class="content-section active">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Visão Geral</h2>
@@ -112,8 +109,7 @@
                 </div>
             </section>
 
-             <!-- Plano de Trabalho Section -->
-            <section id="content-plan" class="content-section">
+             <section id="content-plan" class="content-section">
                  <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Alterações no Plano de Trabalho</h2>
                     <p class="text-slate-500 mt-1">Mudanças orçamentárias e detalhamento das metas afetadas.</p>
@@ -163,7 +159,6 @@
                     </div>
             </section>
 
-            <!-- Análise Financeira Section -->
             <section id="content-analysis" class="content-section">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Análise Financeira</h2>
@@ -181,8 +176,7 @@
                                 </tr>
                             </thead>
                             <tbody id="expense-table-body">
-                                <!-- Rows will be injected by JavaScript -->
-                            </tbody>
+                                </tbody>
                             <tfoot class="font-semibold text-slate-800">
                                 <tr class="border-t-2">
                                     <td class="px-4 py-3">Total Geral Mensal</td>
@@ -203,8 +197,7 @@
                     <h3 class="text-xl font-semibold text-center mb-4">Projeção de Fluxo de Caixa com Saldo Acumulado</h3>
                     <div class="text-center mb-4">
                         <span class="text-slate-600">Saldo atual (21 de agosto): R$ 87.584,15</span>
-                        <!--<span id="initial-balance" class="font-bold text-lg text-slate-800"></span>-->
-                    </div>
+                        </div>
                     <div class="chart-container">
                         <canvas id="cashflowChart"></canvas>
                     </div>
@@ -238,7 +231,6 @@
                 </div>
             </section>
 
-            <!-- Conclusões Section -->
             <section id="content-conclusion" class="content-section">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-semibold text-slate-800">Custo da Equipe</h2>
@@ -348,6 +340,317 @@
                             Custo mensal (Seplan): <span class="font-bold">R$ 21.102,40</span>
                         </p>
                         <p class="text-sm text-sky-700">Custo anual: R$ 253.228,80</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="content-metas" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-semibold text-slate-800">Metas do Convênio</h2>
+                </div>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 01: Levantamento referente ao ambiente de negócios no Acre, com a identificação dos principais desafios e oportunidades para os pequenos negócios realizado.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 01 (um) documento técnico elaborado e publicado sobre o ambiente de negócios do Acre, com o objetivo de fornecer uma análise detalhada e atualizada das condições para o desenvolvimento de empresas no estado.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3">Especificação das Despesas</th>
+                                        <th scope="col" class="px-4 py-3 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-2">Serviços Especializados PJ</td>
+                                        <td class="px-4 py-2 text-right">R$ 36.000,00</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td>
+                                        <td class="px-4 py-2 text-right">R$ 6.000,00</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-2">Despesas com viagens e locomoção (diárias intermunicipais)</td>
+                                        <td class="px-4 py-2 text-right">R$ 10.500,00</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-2">Materiais de consumo</td>
+                                        <td class="px-4 py-2 text-right">R$ 6.000,00</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="px-4 py-2">Serviços gráficos e de reprodução</td>
+                                        <td class="px-4 py-2 text-right">R$ 7.000,00</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr>
+                                        <td class="px-4 py-3">Total Meta 01</td>
+                                        <td class="px-4 py-3 text-right">R$ 65.500,00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 02: Atualização e apresentação do cadastro industrial de Rio Branco, detalhando porte, segmento, atuação, capacidade produtiva e posicionamento de mercado finalizado.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 01 (um) diagnóstico/mapeamento elaborado e aplicado com entrega de 01 (um) documento técnico com as informações tabuladas e 01 banco de dados.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3">Especificação das Despesas</th>
+                                        <th scope="col" class="px-4 py-3 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 84.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Materiais de consumo</td><td class="px-4 py-2 text-right">R$ 7.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td><td class="px-4 py-2 text-right">R$ 9.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias intermunicipais)</td><td class="px-4 py-2 text-right">R$ 9.000,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr>
+                                        <td class="px-4 py-3">Total Meta 02</td>
+                                        <td class="px-4 py-3 text-right">R$ 109.000,00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 03: Elaboração de Estudos prospectivos das cadeias produtivas prioritárias e ambiente de negócios do Acre elaborados e disseminados.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 03 (três) estudos prospectivos elaborados e disseminados.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 300.000,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 03</td><td class="px-4 py-3 text-right">R$ 300.000,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 04: Elaboração da Matriz de insumo-produto para identificação dos setores-chaves da economia acreana.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 01 (uma) Matriz de insumo-produto elaborada.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 267.600,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Materiais de consumo</td><td class="px-4 py-2 text-right">R$ 9.680,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias intermunicipais)</td><td class="px-4 py-2 text-right">R$ 9.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td><td class="px-4 py-2 text-right">R$ 10.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços gráficos e de reprodução</td><td class="px-4 py-2 text-right">R$ 10.050,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 04</td><td class="px-4 py-3 text-right">R$ 306.330,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 05: Criação do Mapa de potencialidades do estado.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 01 (um) mapa de potencialidades elaborado.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 48.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td><td class="px-4 py-2 text-right">R$ 6.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias interestaduais)</td><td class="px-4 py-2 text-right">R$ 4.500,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços gráficos e de reprodução</td><td class="px-4 py-2 text-right">R$ 6.250,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 05</td><td class="px-4 py-3 text-right">R$ 64.750,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 06: Proposição de políticas públicas que incentivem o consumo/comercialização de produtos acreanos realizada.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 02 seminários estratégicos realizados com a elaboração de um relatório técnico evidenciando as principais proposições e um plano de ação para implementação junto as câmaras técnicas.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 420.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens) (1 pessoax2eventos)</td><td class="px-4 py-2 text-right">R$ 6.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias intermunicipais)</td><td class="px-4 py-2 text-right">R$ 9.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias interestaduais) (1 pessoax2eventosx3dias)</td><td class="px-4 py-2 text-right">R$ 12.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td><td class="px-4 py-2 text-right">R$ 7.200,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Materiais de consumo</td><td class="px-4 py-2 text-right">R$ 11.400,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas bancárias</td><td class="px-4 py-2 text-right">R$ 3.600,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços gráficos e de reprodução</td><td class="px-4 py-2 text-right">R$ 2.340,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 06</td><td class="px-4 py-3 text-right">R$ 471.540,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 07: Criação de campanhas de marketing para divulgar os produtos acreanos, destacando seus diferenciais, como a qualidade, a origem e a sustentabilidade.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 05 (cinco) campanhas de marketing para a divulgação dos produtos acreanos através de jornais, rede sociais e eventos estratégicos criadas/lançadas.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 120.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços profissionais contratados - estagiários</td><td class="px-4 py-2 text-right">R$ 22.500,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Divulgação, anúncio, publicidade e propaganda</td><td class="px-4 py-2 text-right">R$ 200.000,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 07</td><td class="px-4 py-3 text-right">R$ 342.500,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 08: Reestruturação do Website do fórum empresarial, transformando-o em uma plataforma dinâmica e às ações, artigos e documentos gerados ao longo do processo revitalizado.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 01 Plataforma web dinâmica e interativa para o Fórum Empresarial implementada.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 36.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços profissionais contratados (estágio PJ)</td><td class="px-4 py-2 text-right">R$ 22.500,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 08</td><td class="px-4 py-3 text-right">R$ 58.500,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 09: Elaborar artigos, boletins, estudos, pesquisas, informativos e outros materiais de divulgação de alta qualidade.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 12 artigos/boletins, estudos, pesquisas, informativos produzidos e publicados.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 201.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Material de Consumo</td><td class="px-4 py-2 text-right">R$ 10.800,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços profissionais contratados (estágio PJ)</td><td class="px-4 py-2 text-right">R$ 22.500,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços gráficos e de reprodução</td><td class="px-4 py-2 text-right">R$ 15.000,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 09</td><td class="px-4 py-3 text-right">R$ 249.300,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold">AÇÃO 10: Realização de Eventos estratégicos para ampliar a divulgação de produtos, serviços e demais ações realizadas no âmbito das câmaras técnicas setoriais.</h3>
+                        <p class="mt-2 text-slate-600"><strong>ENTREGA:</strong> 04 eventos estratégicos realizados ao longo do convênio, com pelo menos 70 participantes por evento.</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr><th scope="col" class="px-4 py-3">Especificação das Despesas</th><th scope="col" class="px-4 py-3 text-right">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços Especializados PJ</td><td class="px-4 py-2 text-right">R$ 128.160,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Materiais de consumo</td><td class="px-4 py-2 text-right">R$ 64.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços gráficos e de reprodução</td><td class="px-4 py-2 text-right">R$ 20.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens) (1 pessoax2eventos)</td><td class="px-4 py-2 text-right">R$ 6.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias intermunicipais)</td><td class="px-4 py-2 text-right">R$ 6.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (diárias interestaduais) (2 pessoasx2eventosx3dias)</td><td class="px-4 py-2 text-right">R$ 9.000,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Despesas com viagens e locomoção (passagens)</td><td class="px-4 py-2 text-right">R$ 21.600,00</td></tr>
+                                    <tr class="border-b"><td class="px-4 py-2">Serviços profissionais contratados - Aluguéis e encargos - PJ</td><td class="px-4 py-2 text-right">R$ 68.000,00</td></tr>
+                                </tbody>
+                                <tfoot class="font-semibold text-slate-800">
+                                    <tr><td class="px-4 py-3">Total Meta 10</td><td class="px-4 py-3 text-right">R$ 322.760,00</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="content-seplan" class="content-section">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-semibold text-slate-800">Convênio SEPLAN</h2>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                    <h3 class="text-xl font-semibold text-center mb-4">METAS E ATIVIDADES</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">META</th>
+                                    <th scope="col" class="px-4 py-3">ATIVIDADES</th>
+                                    <th scope="col" class="px-4 py-3">INÍCIO</th>
+                                    <th scope="col" class="px-4 py-3">TÉRMINO</th>
+                                    <th scope="col" class="px-4 py-3 text-right">VALOR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b"><td class="px-4 py-2 align-top" rowspan="4">1.01 (um) Escritório de Estudos e Pesquisas implantado e em funcionamento até 2026.</td><td class="px-4 py-2">1.1. Contratar Recursos Humanos</td><td class="px-4 py-2">Mês 01</td><td class="px-4 py-2">Mês 03</td><td class="px-4 py-2 text-right">R$ 1.211.888,16</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">1.2. Adquirir mobiliário e equipamentos</td><td class="px-4 py-2">Mês 01</td><td class="px-4 py-2">Mês 03</td><td class="px-4 py-2 text-right">R$ 11.361,97</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">1.3. Visitas de Benchmarking</td><td class="px-4 py-2">Mês 02</td><td class="px-4 py-2">Mês 12</td><td class="px-4 py-2 text-right">R$ 43.639,67</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">1.4. Visitas técnicas</td><td class="px-4 py-2">Mês 02</td><td class="px-4 py-2">Mês 20</td><td class="px-4 py-2 text-right">R$ 48.361,80</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2 align-top" rowspan="3">2.01 (um) Plano Estratégico de Gestão e Governança...</td><td class="px-4 py-2">2.1. Elaborar e Implantar o Plano Estratégico de Consolidação da Rota de Integração;</td><td class="px-4 py-2">Mês 02</td><td class="px-4 py-2">Mês 12</td><td class="px-4 py-2 text-right">R$ 0,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">2.2. Elaborar e Implantar o Plano de Relações Internacionais;</td><td class="px-4 py-2">Mês 12</td><td class="px-4 py-2">Mês 15</td><td class="px-4 py-2 text-right">R$ 0,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">2.3. Dois Fóruns de Desenvolvimento Regional</td><td class="px-4 py-2">Mês 09</td><td class="px-4 py-2">Mês 20</td><td class="px-4 py-2 text-right">R$ 42.752,12</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2 align-top" rowspan="2">3. 01 (um) Observatório de Desenvolvimento Regional do Acre implantado;</td><td class="px-4 py-2">3.1. Contratar licenças/softwares</td><td class="px-4 py-2">Mês 01</td><td class="px-4 py-2">Mês 03</td><td class="px-4 py-2 text-right">R$ 9.600,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">3.2. Elaborar e implantar o Observatório de Desenvolvimento Regional</td><td class="px-4 py-2">Mês 04</td><td class="px-4 py-2">Mês 10</td><td class="px-4 py-2 text-right">R$ 132.134,07</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-center mb-4">PLANO DE APLICAÇÃO E DETALHAMENTO DAS DESPESAS</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">Descrição</th>
+                                    <th scope="col" class="px-4 py-3 text-right">Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b"><td class="px-4 py-2">Coordenador Geral</td><td class="px-4 py-2 text-right">R$ 387.899,28</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Coordenador Técnico</td><td class="px-4 py-2 text-right">R$ 295.728,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Assistente de Pesquisa</td><td class="px-4 py-2 text-right">R$ 98.152,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Assistente Administrativo</td><td class="px-4 py-2 text-right">R$ 118.558,40</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Comunicador Social</td><td class="px-4 py-2 text-right">R$ 118.272,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Gerente de Projetos</td><td class="px-4 py-2 text-right">R$ 193.278,48</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Computador</td><td class="px-4 py-2 text-right">R$ 6.589,18</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Mesa</td><td class="px-4 py-2 text-right">R$ 1.614,50</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Cadeira</td><td class="px-4 py-2 text-right">R$ 1.543,80</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Diárias (Benchmarking)</td><td class="px-4 py-2 text-right">R$ 20.041,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Passagens Rio Branco - São Borja</td><td class="px-4 py-2 text-right">R$ 23.598,67</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Diárias (Técnicas)</td><td class="px-4 py-2 text-right">R$ 5.725,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Diárias (Internacional)</td><td class="px-4 py-2 text-right">R$ 26.654,40</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Passagens (Rio Branco - Lima)</td><td class="px-4 py-2 text-right">R$ 15.982,40</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Contratação de serviços para realizar o fórum</td><td class="px-4 py-2 text-right">R$ 31.617,65</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Diárias (Fórum)</td><td class="px-4 py-2 text-right">R$ 6.011,25</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Passagens Rio Branco Cruzeiro do Sul</td><td class="px-4 py-2 text-right">R$ 5.123,22</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Mensalidades dos softwares</td><td class="px-4 py-2 text-right">R$ 9.600,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Consultoria para construção de website</td><td class="px-4 py-2 text-right">R$ 87.530,00</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Contratar serviços gráficos</td><td class="px-4 py-2 text-right">R$ 24.444,07</td></tr>
+                                <tr class="border-b"><td class="px-4 py-2">Tradução</td><td class="px-4 py-2 text-right">R$ 20.160,00</td></tr>
+                            </tbody>
+                             <tfoot class="font-bold text-slate-800">
+                                <tr class="border-t-2"><td class="px-4 py-3">TOTAL GERAL</td><td class="px-4 py-3 text-right">R$ 1.499.737,78</td></tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </section>
