@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Financeiro e Convênios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Paleta de cores customizada inspirada na identidade visual
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': '#005A8C',
+                        'brand-blue-dark': '#004C75',
+                        'brand-green': '#4CAF50',
+                        'brand-green-dark': '#388E3C',
+                        'brand-orange': '#FFA000',
+                        'brand-orange-light': '#FFECB3',
+                        'brand-background': '#F0F4F8', // Um cinza azulado muito claro
+                        'brand-surface': '#FFFFFF',
+                        'brand-text-primary': '#1E293B', // Slate 800
+                        'brand-text-secondary': '#475569', // Slate 600
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos globais e animações */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.brand-background');
+            color: theme('colors.brand-text-primary');
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 450px;
+            max-height: 60vh;
+        }
+        .nav-btn {
+            transition: all 0.3s ease-in-out;
+            border-bottom: 4px solid transparent;
+            transform: translateY(2px);
+        }
+        .nav-btn.active {
+            color: theme('colors.brand-blue');
+            border-bottom-color: theme('colors.brand-blue');
+        }
+        .nav-btn:not(.active):hover {
+            color: theme('colors.brand-blue');
+            border-bottom-color: theme('colors.brand-orange');
+        }
+        .content-section {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .kpi-card {
+            background-color: theme('colors.brand-surface');
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            text-align: center;
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .kpi-title {
+            color: theme('colors.brand-text-secondary');
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .kpi-value {
+            color: theme('colors.brand-text-primary');
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 0.5rem;
+        }
+        .kpi-value.negative { color: #dc2626; }
+        .kpi-value.positive { color: theme('colors.brand-green-dark'); }
+        table thead th {
+            background-color: #E2E8F0; /* slate-200 */
+            color: theme('colors.brand-text-primary');
+            font-weight: 600;
+        }
+        .icon-box {
+            background-color: theme('colors.brand-blue');
+            color: white;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .icon-box:hover {
+            transform: scale(1.1);
+            background-color: theme('colors.brand-blue-dark');
+        }
+        .card {
+             background-color: theme('colors.brand-surface');
+             border-radius: 0.75rem;
+             padding: 1.5rem;
+             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-blue">Painel Financeiro</h1>
+            <p class="text-brand-text-secondary mt-2 text-lg">Análise Financeira, Convênio SEBRAE e Convênio SEPLAN</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-slate-200 mb-10">
+            <div class="flex flex-wrap justify-center gap-2 md:gap-8">
+                <button id="nav-overview" class="nav-btn active text-base md:text-lg font-semibold py-3 px-4">Visão Geral</button>
+                <button id="nav-plan" class="nav-btn text-base md:text-lg font-semibold py-3 px-4">Plano de Trabalho</button>
+                <button id="nav-metas" class="nav-btn text-base md:text-lg font-semibold py-3 px-4">Metas SEBRAE</button>
+                <button id="nav-analysis" class="nav-btn text-base md:text-lg font-semibold py-3 px-4">Análise Financeira</button>
+                <button id="nav-seplan" class="nav-btn text-base md:text-lg font-semibold py-3 px-4">Convênio SEPLAN</button>
+                <button id="nav-equipe" class="nav-btn text-base md:text-lg font-semibold py-3 px-4">Equipe</button>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Visão Geral Section -->
+            <section id="content-overview" class="content-section active">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Visão Geral do Cenário</h2>
+                    <p class="text-brand-text-secondary mt-1">Principais indicadores</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="kpi-card border-red-500">
+                        <h3 class="kpi-title">Redução Total do Convênio</h3>
+                        <p id="kpi-reduction" class="kpi-value negative"></p>
+                    </div>
+                    <div class="kpi-card border-brand-blue">
+                        <h3 class="kpi-title">Novo Valor Total do Convênio</h3>
+                        <p id="kpi-new-total" class="kpi-value"></p>
+                    </div>
+                    <div class="kpi-card border-brand-green">
+                        <h3 class="kpi-title">Redução Custo Mensal do Fórum</h3>
+                        <p id="kpi-monthly-reduction" class="kpi-value positive"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Plano de Trabalho Section -->
+            <section id="content-plan" class="content-section">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Alterações no Plano de Trabalho</h2>
+                    <p class="text-brand-text-secondary mt-1">Mudanças orçamentárias e detalhamento das metas afetadas.</p>
+                </div>
+                <div class="card p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-center mb-4">Comparativo do Orçamento Total</h3>
+                    <div class="chart-container" style="height:300px;"><canvas id="budgetChart"></canvas></div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-6 text-center">Reestruturação das Metas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-brand-blue">Fusão e Redução de Metas</h4>
+                            <div class="p-4 bg-brand-background rounded-lg space-y-4">
+                                <p class="text-brand-text-secondary">A <strong class="text-brand-text-primary">Meta 8</strong> (R$ 297.600) foi fundida com a <strong class="text-brand-text-primary">Meta 11</strong> (R$ 225.000), resultando na nova <strong class="text-brand-blue font-semibold">Meta 10</strong> (R$ 322.760).</p>
+                                <div class="p-3 bg-white rounded">
+                                    <strong class="text-brand-text-primary">Nova Meta 10:</strong> A despesa "Serviços profissionais - Aluguéis" foi reduzida de 18 para <strong>8 meses</strong>.
+                                </div>
+                                <p class="font-semibold text-red-600 text-lg">Redução na fusão: - R$ 199.840,00</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-brand-blue">Redução de Despesas Específicas</h4>
+                            <div class="p-4 bg-brand-background rounded-lg space-y-4">
+                                <div class="p-3 bg-white rounded">
+                                    <strong class="text-brand-text-primary">Meta 7:</strong> A despesa "Divulgação, anúncio, publicidade" foi reduzida de 18 para <strong>8 meses</strong>.
+                                </div>
+                                <p class="font-semibold text-red-600 text-lg">Redução: - R$ 249.280,00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-lg font-semibold mb-3 text-brand-green-dark text-center">Valores Redistribuídos para Outras Metas</h4>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <ul class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-brand-text-secondary">
+                                <li><strong>Meta 1:</strong> + R$ 2.450,00</li>
+                                <li><strong>Meta 2:</strong> + R$ 300,00</li>
+                                <li><strong>Meta 4:</strong> + R$ 9.800,00</li>
+                                <li><strong>Meta 5:</strong> + R$ 1.350,00</li>
+                                <li><strong>Meta 6:</strong> + R$ 9.000,00</li>
+                                <li><strong>Meta 8:</strong> + R$ 900,00</li>
+                                <li><strong>Meta 9:</strong> + R$ 45.900,00</li>
+                            </ul>
+                            <div class="text-center mt-4 pt-4 border-t border-green-200">
+                                <strong class="text-lg text-brand-green-dark">Total Redistribuído: R$ 69.700,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metas SEBRAE Section -->
+            <section id="content-metas" class="content-section">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Metas do Convênio SEBRAE</h2>
+                </div>
+                <div class="space-y-8" id="sebrae-goals-container">
+                    <!-- Cards de metas serão inseridos dinamicamente aqui -->
+                </div>
+            </section>
+
+            <!-- Análise Financeira Section -->
+            <section id="content-analysis" class="content-section">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Análise Financeira</h2>
+                    <p class="text-brand-text-secondary mt-1">Custos operacionais, fluxo de caixa e projeções de saldo.</p>
+                </div>
+                <div class="card p-4 sm:p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-center mb-4">Despesas Mensais do Fórum</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead><tr><th class="px-4 py-3">Descrição</th><th class="px-4 py-3 text-right">Custo Com Convênios</th><th class="px-4 py-3 text-right">Custo Sem Convênios</th></tr></thead>
+                            <tbody id="expense-table-body"></tbody>
+                            <tfoot class="font-semibold text-brand-text-primary text-base"><tr class="border-t-2 border-slate-300"><td class="px-4 py-3">Total Geral Mensal</td><td id="total-with-agreement" class="px-4 py-3 text-right"></td><td id="total-without-agreement" class="px-4 py-3 text-right"></td></tr></tfoot>
+                        </table>
+                    </div>
+                    <div class="mt-6 p-4 bg-brand-green/10 border-l-4 border-brand-green rounded-r-lg">
+                        <p class="text-lg font-semibold text-brand-green-dark">Redução Mensal de Custo: <span id="monthly-savings" class="font-bold"></span></p>
+                        <p class="text-sm text-brand-green-dark/80">O convênio resulta em uma economia significativa, reduzindo o custo operacional do Fórum.</p>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-center mb-4">Projeção de Fluxo de Caixa com Saldo Acumulado</h3>
+                    <div class="text-center mb-4"><span class="text-brand-text-secondary">Saldo inicial: <span id="initial-balance"></span></span></div>
+                    <div class="chart-container"><canvas id="cashflowChart"></canvas></div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Treinamento para o Fórum</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 25.000,00</p>
+                            <p class="text-sm text-red-700">A ser pago em Agosto</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">FUNDAPE</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 45.000,00</p>
+                            <p class="text-sm text-red-700">A ser pago em Agosto</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Aporte ao Convênio</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 50.000,00</p>
+                            <p class="text-sm text-red-700">A ser pago em Novembro</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-semibold text-green-800">Saldo Final Previsto (Dez)</h4>
+                            <p id="final-balance" class="text-lg font-bold text-green-600"></p>
+                            <p class="text-sm text-green-700">Acumulado ao final do ano</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-semibold text-red-800">Aporte ao Convênio</h4>
+                            <p class="text-lg font-bold text-red-600">- R$ 120.000,00</p>
+                            <p class="text-sm text-red-700">A ser pago em Março/2026</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Convênio SEPLAN Section -->
+            <section id="content-seplan" class="content-section">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Convênio SEPLAN: Rota de Integração Sul-Americana</h2>
+                    <p class="text-brand-text-secondary mt-2 max-w-3xl mx-auto text-lg">Termo de Colaboração para elaboração e implementação de um Plano Estratégico de Gestão e Governança para a Consolidação da Rota de Integração Sul-Americana Quadrante Rondon, no trecho acreano.</p>
+                </div>
+
+                <div class="card p-6 mb-10">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-blue">Principais Componentes do Projeto</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="flex flex-col items-center p-4">
+                            <div class="icon-box flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .325-.468L8 0l6.763.075zM11 15v-1h-1v1h1zm-3 0v-1h-1v1h1zm-3 0v-1h-1v1h1zm0-3h1v-1H5v1zm0-3h1V8H5v1zm0-3h1V5H5v1zm3 6h1v-1H8v1zm0-3h1V8H8v1zm0-3h1V5H8v1zm3 6h1v-1h-1v1zm0-3h1V8h-1v1zm0-3h1V5h-1v1zM4 3h1V2H4v1zm3 0h1V2H7v1zm3 0h1V2h-1v1z"/></svg></div>
+                            <h4 class="text-xl font-semibold text-brand-blue mb-2">Escritório de Estudos</h4>
+                            <p class="text-brand-text-secondary">Criação de um escritório para dar suporte técnico à elaboração e execução do Plano Estratégico.</p>
+                        </div>
+                        <div class="flex flex-col items-center p-4">
+                            <div class="icon-box flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M7 7V1.414a1 1 0 0 1 2 0V7h5a1 1 0 0 1 .8.4l.975 1.3a.5.5 0 0 1 0 .6L14.8 10.6a1 1 0 0 1-.8.4H9v5.586a1 1 0 0 1-2 0V11H2a1 1 0 0 1-.8-.4L.225 9.3a.5.5 0 0 1 0-.6L1.2 7.4A1 1 0 0 1 2 7h5zm1 3.414V16a1 1 0 1 1-2 0v-5.586H2.586a.5.5 0 0 1-.4-.2L1.21 8.4a.5.5 0 0 1 0-.8L2.186 6.8a.5.5 0 0 1 .4-.2H7V1a1 1 0 1 1 2 0v5.586h4.414a.5.5 0 0 1 .4.2l.975 1.3a.5.5 0 0 1 0 .8l-.975 1.3a.5.5 0 0 1-.4.2H9z"/></svg></div>
+                            <h4 class="text-xl font-semibold text-brand-blue mb-2">Plano Estratégico</h4>
+                            <p class="text-brand-text-secondary">Elaboração de um Plano de Gestão e Governança para consolidar a Rota de Integração.</p>
+                        </div>
+                        <div class="flex flex-col items-center p-4">
+                            <div class="icon-box flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 6.618V14.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V6.618a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882V2.5zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM10.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM2 14.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V6.732a.5.5 0 0 0-.16-.351l-.895-.447a1.5 1.5 0 0 1-.84-1.342V3.5a1.5 1.5 0 0 1-1.5-1.5h-1A1.5 1.5 0 0 1 9 3.5v1.118a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 11.5 6.882V14h-1V6.118a1.5 1.5 0 0 1-.83-1.342V3.5A1.5 1.5 0 0 1 8.167 2a.5.5 0 0 1 .333.12L8 2.5V5h-2V2.5a.5.5 0 0 1 .333-.48L6.833 2A1.5 1.5 0 0 1 5.5 3.5v1.276a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 3.5 6.732V14H2V6.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 4 4.882V3.5A1.5 1.5 0 0 1 2.5 2h-1A1.5 1.5 0 0 1 0 3.5v1.276a1.5 1.5 0 0 1 .83 1.342l.894.447A.5.5 0 0 0 2 6.732V14.5z"/></svg></div>
+                            <h4 class="text-xl font-semibold text-brand-blue mb-2">Observatório Regional</h4>
+                            <p class="text-brand-text-secondary">Criação de um portal para monitorar e divulgar dados socioeconômicos estratégicos do Acre.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 mb-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-blue">Justificativa e Potencial</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-brand-background rounded-lg">
+                            <h4 class="font-semibold text-lg mb-2">Diagnósticos Prévios</h4>
+                            <p class="text-brand-text-secondary">Baseado em estudos do CEDEPLAR/UFMG e Fundação Dom Cabral que apontam o potencial da Rota de Integração.</p>
+                        </div>
+                        <div class="p-4 bg-brand-background rounded-lg">
+                            <h4 class="font-semibold text-lg mb-2">Potencial Econômico</h4>
+                            <p class="text-brand-text-secondary">A Rota pode transformar a economia acreana, conectando o estado ao mercado asiático e fortalecendo cadeias produtivas locais.</p>
+                        </div>
+                        <div class="p-4 bg-brand-background rounded-lg">
+                            <h4 class="font-semibold text-lg mb-2">Desafios a Superar</h4>
+                            <p class="text-brand-text-secondary">Necessidade de eliminar gargalos logísticos, atrair investimentos e criar políticas públicas eficazes para garantir a competitividade.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-blue">Metas e Atividades do Convênio</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead><tr><th class="px-4 py-3">META</th><th class="px-4 py-3">ATIVIDADES</th><th class="px-4 py-3">INÍCIO</th><th class="px-4 py-3">TÉRMINO</th><th class="px-4 py-3 text-right">VALOR</th></tr></thead>
+                            <tbody id="seplan-goals-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Equipe Section -->
+            <section id="content-equipe" class="content-section">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-brand-text-primary">Estrutura de Custos da Equipe</h2>
+                    <p class="text-brand-text-secondary mt-1">Detalhamento dos custos mensais e anuais por profissional e convênio.</p>
+                </div>
+                <div class="card p-8">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead><tr class="bg-slate-200"><th class="p-3">NOME</th><th class="p-3">MÊS</th><th class="p-3">TOTAL ANO</th><th class="p-3">TIPO</th></tr></thead>
+                            <tbody id="team-table-body"></tbody>
+                            <tfoot><tr class="bg-slate-100 font-bold text-base"><td class="p-3">Total</td><td class="p-3">R$ 48.942,40</td><td class="p-3">R$ 587.308,80</td><td></td></tr></tfoot>
+                        </table>
+                    </div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-brand-orange-light border-l-4 border-brand-orange rounded-r-lg">
+                            <h4 class="font-semibold text-brand-text-primary">Custo Mensal (Fórum)</h4>
+                            <p class="text-2xl font-bold text-brand-blue">R$ 9.660,00</p>
+                            <p class="text-sm text-brand-text-secondary">Anual: R$ 115.920,00</p>
+                        </div>
+                        <div class="p-4 bg-brand-orange-light border-l-4 border-brand-orange rounded-r-lg">
+                            <h4 class="font-semibold text-brand-text-primary">Custo Mensal (Sebrae)</h4>
+                            <p class="text-2xl font-bold text-brand-blue">R$ 15.480,00</p>
+                            <p class="text-sm text-brand-text-secondary">Anual: R$ 185.760,00</p>
+                        </div>
+                        <div class="p-4 bg-brand-orange-light border-l-4 border-brand-orange rounded-r-lg">
+                            <h4 class="font-semibold text-brand-text-primary">Custo Mensal (Seplan)</h4>
+                            <p class="text-2xl font-bold text-brand-blue">R$ 21.102,40</p>
+                            <p class="text-sm text-brand-text-secondary">Anual: R$ 253.228,80</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Função para formatar valores como moeda brasileira
+        const formatCurrency = (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+
+        // Objeto central com todos os dados da aplicação
+        const appData = {
+            kpis: { initialTotal: 2669600, newTotal: 2290180, totalReduction: -379420, monthlySavings: 35979.30 },
+            expenses: [
+                { label: 'Equipe Fórum', with: 9660.00, without: 48942.40 },
+                { label: 'Consultor DEL - Contrato e Diária', with: 29800, without: 29800 },
+                { label: 'Passagem Estácio DEL Acre', with: 3000, without: 3000 },
+                { label: 'Passagem Estácio DEL Amapá', with: 2500, without: 2500 },
+                { label: 'Contador', with: 1300, without: 1300 },
+                { label: 'ISS', with: 800, without: 800 },
+                { label: 'Limpeza, Energia, Telefone e Internet', with: 1864, without: 1864 },
+                { label: 'Locação Sala', with: 2650, without: 2650 },
+                { label: 'Fundo Fixo', with: 759, without: 759 },
+                { label: 'Taxa Bancária', with: 150, without: 150 },
+                { label: 'Material de Expediente e Outros', with: 600, without: 600 },
+            ],
+            cashflow: {
+                initialBalance: 31353,
+                months: [
+                    { month: 'Agosto', revenues: { total: 142480, details: [ { source: 'DEL Turismo - Epitaciolândia', value: 8400 }, { source: 'DEL Turismo - Rio Branco', value: 17000 }, { source: 'DEL Turismo - Amapá', value: 37500 }, { source: 'PAGAMENTO Consultoria Fórum ExpoJuruá 2025', value: 70000 }, { source: 'A receber de Julho (Xapuri)', value: 10080 } ]}, expenses: { total: 145645.45, details: [ { source: 'Fórum', value: 100645.45 }, { source: 'FUNDAPE', value: 45000 } ]} },
+                    { month: 'Setembro', revenues: { total: 62900, details: [ { source: 'DEL Turismo - Epitaciolândia', value: 8400 }, { source: 'DEL Turismo - Rio Branco', value: 17000 }, { source: 'DEL Turismo - Amapá', value: 37500 } ]}, expenses: { total: 53083.00, details: [ { source: 'Fórum', value: 53083.00 } ]} },
+                    { month: 'Outubro', revenues: { total: 62900, details: [ { source: 'DEL Turismo - Epitaciolândia', value: 8400 }, { source: 'DEL Turismo - Rio Branco', value: 17000 }, { source: 'DEL Turismo - Amapá', value: 37500 } ]}, expenses: { total: 53083.00, details: [ { source: 'Fórum', value: 53083.00 } ]} },
+                    { month: 'Novembro', revenues: { total: 125900, details: [ { source: 'DEL Turismo - Epitaciolândia', value: 8400 }, { source: 'DEL Turismo - Rio Branco', value: 17000 }, { source: 'DEL Turismo - Amapá', value: 37500 }, { source: 'DEVOLUÇÃO IEL', value: 63000 } ]}, expenses: { total: 103083.00, details: [ { source: 'Fórum', value: 53083.00 }, { source: 'Aporte Convênio', value: 50000 } ]} },
+                    { month: 'Dezembro', revenues: { total: 62900, details: [ { source: 'DEL Turismo - Epitaciolândia', value: 8400 }, { source: 'DEL Turismo - Rio Branco', value: 17000 }, { source: 'DEL Turismo - Amapá', value: 37500 } ]}, expenses: { total: 53083.00, details: [ { source: 'Fórum', value: 53083.00 } ]} }
+                ]
+            },
+            sebraeGoals: [
+                { id: 1, title: 'Levantamento referente ao ambiente de negócios no Acre, com a identificação dos principais desafios e oportunidades para os pequenos negócios realizado.', delivery: '01 (um) documento técnico elaborado e publicado sobre o ambiente de negócios do Acre, com o objetivo de fornecer uma análise detalhada e atualizada das condições para o desenvolvimento de empresas no estado.', expenses: [ { name: 'Serviços Especializados PJ', value: 36000 }, { name: 'Passagens', value: 6000 }, { name: 'Diárias intermunicipais', value: 10500 }, { name: 'Materiais de consumo', value: 6000 }, { name: 'Serviços gráficos', value: 7000 } ]},
+                { id: 2, title: 'Atualização e apresentação do cadastro industrial de Rio Branco, detalhando porte, segmento, atuação, capacidade produtiva e posicionamento de mercado finalizado.', delivery: '01 (um) diagnóstico/mapeamento elaborado e aplicado com entrega de 01 (um) documento técnico com as informações tabuladas e 01 banco de dados.', expenses: [ { name: 'Serviços Especializados PJ', value: 84000 }, { name: 'Materiais de consumo', value: 7000 }, { name: 'Passagens', value: 9000 }, { name: 'Diárias intermunicipais', value: 9000 } ]},
+                { id: 3, title: 'Elaboração de Estudos prospectivos das cadeias produtivas prioritárias e ambiente de negócios do Acre elaborados e disseminados.', delivery: '03 (três) estudos prospectivos elaborados e disseminados.', expenses: [ { name: 'Serviços Especializados PJ', value: 300000 } ]},
+                { id: 4, title: 'Elaboração da Matriz de insumo-produto para identificação dos setores-chaves da economia acreana', delivery: '01 (uma)  Matriz de insumo-produto elaborada', expenses: [ { name: 'Serviços Especializados PJ', value: 267600 }, { name: 'Materiais de consumo', value: 9680 }, { name: 'Diárias intermunicipais', value: 9000 }, { name: 'Passagens', value: 10000 }, { name: 'Serviços gráficos', value: 10050 } ]},
+                { id: 5, title: 'Criação do Mapa de potencialidades do estado', delivery: '01 mapa de potencialidades elaborado.', expenses: [ { name: 'Serviços Especializados PJ', value: 48000 }, { name: 'Passagens', value: 6000 }, { name: 'Diárias interestaduais', value: 4500 }, { name: 'Serviços gráficos', value: 6250 } ]},
+                { id: 6, title: 'Proposição de políticas públicas que incentivem o consumo/comercialização de produtos acreanos realizada', delivery: ' 02 seminários estratégicos realizados com a elaboração de um relatório técnico evidenciando as principais proposições e um plano de ação para implementação junto as câmaras técnicas', expenses: [ { name: 'Serviços Especializados PJ', value: 420000 }, { name: 'Passagens (eventos)', value: 6000 }, { name: 'Diárias intermunicipais', value: 9000 }, { name: 'Diárias interestaduais', value: 12000 }, { name: 'Passagens', value: 7200 }, { name: 'Materiais de consumo', value: 11400 }, { name: 'Despesas bancárias', value: 3600 }, { name: 'Serviços gráficos', value: 2340 } ]},
+                { id: 7, title: 'Criação de campanhas de marketing para divulgar os produtos acreanos, destacando seus diferenciais, como a qualidade, a origem e a sustentabilidade', delivery: '05 (cinco) campanhas de marketing para a divulgação dos produtos acreanos através de jornais, rede sociais e eventos estratégicos criadas/lançadas', expenses: [ { name: 'Serviços Especializados PJ', value: 120000 }, { name: 'Estagiários', value: 22500 }, { name: 'Divulgação e publicidade', value: 200000 } ]},
+                { id: 8, title: 'Reestruturação do Website do fórum empresarial,  transformando-o em uma plataforma dinâmica e às ações, artigos e documentos gerados ao longo do processo revitalizado', delivery: '01 Plataforma web dinâmica e interativa para o Fórum Empresarial implementada', expenses: [ { name: 'Serviços Especializados PJ', value: 36000 }, { name: 'Estágio PJ', value: 22500 } ]},
+                { id: 9, title: 'Elaborar artigos, boletins, estudos, pesquisas, informativos e outros materiais de divulgação de alta  qualidade', delivery: '12 artigos/boletins, estudos,  pesquisas, informativos produzidos e publicados', expenses: [ { name: 'Serviços Especializados PJ', value: 201000 }, { name: 'Material de Consumo', value: 10800 }, { name: 'Estágio PJ', value: 22500 }, { name: 'Serviços gráficos', value: 15000 } ]},
+                { id: 10, title: 'Realização de Eventos estratégicos para ampliar a divulgação de produtos, serviços e demais ações realizadas no âmbito das câmaras técnicas setoriais', delivery: ' 04 eventos estratégicos realizados ao longo do convênio, com pelo menos 70 participantes por evento', expenses: [ { name: 'Serviços Especializados PJ', value: 128160 }, { name: 'Materiais de consumo', value: 64000 }, { name: 'Serviços gráficos', value: 20000 }, { name: 'Passagens (eventos)', value: 6000 }, { name: 'Diárias intermunicipais', value: 6000 }, { name: 'Diárias interestaduais', value: 9000 }, { name: 'Passagens', value: 21600 }, { name: 'Aluguéis e encargos - PJ', value: 68000 } ]}
+            ],
+            seplanGoals: [
+                { meta: '1. Escritório de Estudos', activity: '1.1. Contratar Recursos Humanos', start: 'Mês 01', end: 'Mês 03', value: 1211888.16 },
+                { meta: '1. Escritório de Estudos', activity: '1.2. Adquirir mobiliário e equipamentos', start: 'Mês 01', end: 'Mês 03', value: 11361.97 },
+                { meta: '1. Escritório de Estudos', activity: '1.3. Visitas de Benchmarking', start: 'Mês 02', end: 'Mês 12', value: 43639.67 },
+                { meta: '1. Escritório de Estudos', activity: '1.4. Visitas técnicas', start: 'Mês 02', end: 'Mês 20', value: 48361.80 },
+                { meta: '2. Plano Estratégico', activity: '2.1. Elaborar e Implantar o Plano Estratégico', start: 'Mês 02', end: 'Mês 12', value: 0 },
+                { meta: '2. Plano Estratégico', activity: '2.2. Elaborar e Implantar o Plano de Relações Internacionais', start: 'Mês 12', end: 'Mês 15', value: 0 },
+                { meta: '2. Plano Estratégico', activity: '2.3. Dois Fóruns de Desenvolvimento Regional', start: 'Mês 09', end: 'Mês 20', value: 42752.12 },
+                { meta: '3. Observatório Regional', activity: '3.1. Contratar licenças/softwares', start: 'Mês 01', end: 'Mês 03', value: 9600.00 },
+                { meta: '3. Observatório Regional', activity: '3.2. Elaborar e implantar o Observatório', start: 'Mês 04', end: 'Mês 10', value: 132134.07 },
+            ],
+            team: [
+                { name: 'ANNA FÁBIA FITTIPALDY DE OLIVEIRA', month: 1350.00, year: 16200.00, type: 'ESTAGIÁRIO(A)' },
+                { name: 'LAIANNY SENA DA SILVA', month: 1350.00, year: 16200.00, type: 'ESTAGIÁRIO(A)' },
+                { name: 'ANDRÉ FERREIRA SANTANA', month: 2160.00, year: 25380.00, type: 'ME (SEBRAE)' },
+                { name: 'ANA PAULA PEREIRA DA SILVA', month: 3600.00, year: 43200.00, type: 'MEI (SEBRAE)' },
+                { name: 'EROS CÁSSIUS RIBEIRO DE MELO', month: 1680.00, year: 20160.00, type: 'MEI (SEBRAE)' },
+                { name: 'ALINE DO NASCIMENTO LIMA', month: 3000.00, year: 36000.00, type: 'MEI (SEBRAE)' },
+                { name: 'MARIA DA CONCEIÇÃO', month: 5040.00, year: 60480.00, type: 'MEI (SEBRAE)' },
+                { name: 'STEFANI GABRIELE DE ALMEIDA CAR', month: 5000.00, year: 60000.00, type: 'MEI (FÓRUM)' },
+                { name: 'JULIANA MONTEIRO DA CRUZ VILA N', month: 2660.00, year: 31920.00, type: 'REGISTRADO' },
+                { name: 'JULIANA MONTEIRO DA CRUZ VILA N', month: 4939.93, year: 59279.16, type: 'MEI (SEPLAN)' },
+                { name: 'VELOSO LTDA', month: 2000.00, year: 24000.00, type: 'ME (FÓRUM)' },
+                { name: 'VELOSO LTDA', month: 16162.47, year: 193949.64, type: 'ME (SEPLAN)' },
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- INICIALIZAÇÃO E RENDERIZAÇÃO ---
+            
+            // Renderiza os KPIs na Visão Geral
+            document.getElementById('kpi-reduction').textContent = formatCurrency(appData.kpis.totalReduction);
+            document.getElementById('kpi-new-total').textContent = formatCurrency(appData.kpis.newTotal);
+            document.getElementById('kpi-monthly-reduction').textContent = formatCurrency(appData.kpis.monthlySavings);
+            
+            // Renderiza a tabela de despesas mensais
+            const expenseTableBody = document.getElementById('expense-table-body');
+            const totalWith = appData.expenses.reduce((sum, item) => sum + item.with, 0);
+            const totalWithout = appData.expenses.reduce((sum, item) => sum + item.without, 0);
+            appData.expenses.forEach(item => {
+                const row = expenseTableBody.insertRow();
+                row.className = 'border-b border-slate-200';
+                row.innerHTML = `<td class="px-4 py-2">${item.label}</td><td class="px-4 py-2 text-right">${formatCurrency(item.with)}</td><td class="px-4 py-2 text-right text-brand-text-secondary">${formatCurrency(item.without)}</td>`;
+            });
+            document.getElementById('total-with-agreement').textContent = formatCurrency(totalWith);
+            document.getElementById('total-without-agreement').textContent = formatCurrency(totalWithout);
+            document.getElementById('monthly-savings').textContent = formatCurrency(totalWithout - totalWith);
+
+            // Renderiza a tabela da equipe
+            const teamTableBody = document.getElementById('team-table-body');
+            appData.team.forEach(member => {
+                const row = teamTableBody.insertRow();
+                row.className = 'hover:bg-slate-50';
+                row.innerHTML = `<td class="p-3 border border-slate-200">${member.name}</td><td class="p-3 border border-slate-200">${formatCurrency(member.month)}</td><td class="p-3 border border-slate-200">${formatCurrency(member.year)}</td><td class="p-3 border border-slate-200">${member.type}</td>`;
+            });
+
+            // Renderiza os cards de metas do SEBRAE
+            const sebraeContainer = document.getElementById('sebrae-goals-container');
+            appData.sebraeGoals.forEach(goal => {
+                const totalGoalValue = goal.expenses.reduce((sum, exp) => sum + exp.value, 0);
+                const expenseRows = goal.expenses.map(exp => `<tr class="border-b"><td class="px-4 py-2">${exp.name}</td><td class="px-4 py-2 text-right">${formatCurrency(exp.value)}</td></tr>`).join('');
+                sebraeContainer.innerHTML += `
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold text-brand-blue">AÇÃO ${String(goal.id).padStart(2, '0')}: ${goal.title}</h3>
+                        <p class="mt-2 text-brand-text-secondary"><strong>ENTREGA:</strong> ${goal.delivery}</p>
+                        <div class="mt-4 overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead><tr><th class="px-4 py-3">Especificação</th><th class="px-4 py-3 text-right">Total</th></tr></thead>
+                                <tbody>${expenseRows}</tbody>
+                                <tfoot class="font-semibold text-brand-text-primary"><tr><td class="px-4 py-3">Total Meta</td><td class="px-4 py-3 text-right">${formatCurrency(totalGoalValue)}</td></tr></tfoot>
+                            </table>
+                        </div>
+                    </div>`;
+            });
+
+            // Renderiza a tabela de metas do SEPLAN
+            const seplanGoalsBody = document.getElementById('seplan-goals-body');
+            let lastMeta = '';
+            appData.seplanGoals.forEach(goal => {
+                const row = seplanGoalsBody.insertRow();
+                row.className = 'border-b';
+                let metaCell = '';
+                if (goal.meta !== lastMeta) {
+                    const rowSpan = appData.seplanGoals.filter(g => g.meta === goal.meta).length;
+                    metaCell = `<td class="px-4 py-2 align-top font-medium" rowspan="${rowSpan}">${goal.meta}</td>`;
+                    lastMeta = goal.meta;
+                }
+                row.innerHTML = `${metaCell}<td class="px-4 py-2">${goal.activity}</td><td class="px-4 py-2">${goal.start}</td><td class="px-4 py-2">${goal.end}</td><td class="px-4 py-2 text-right">${formatCurrency(goal.value)}</td>`;
+            });
+            
+            // --- LÓGICA DE NAVEGAÇÃO ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            const switchTab = (tabId) => {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                document.getElementById(`nav-${tabId}`).classList.add('active');
+                document.getElementById(`content-${tabId}`).classList.add('active');
+            };
+            navButtons.forEach(button => {
+                button.addEventListener('click', (e) => switchTab(e.target.id.replace('nav-', '')));
+            });
+
+            // --- GRÁFICOS ---
+            const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+            new Chart(budgetCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Orçamento Total'],
+                    datasets: [
+                        { label: 'Valor Inicial', data: [appData.kpis.initialTotal], backgroundColor: '#94a3b8', barPercentage: 0.5 },
+                        { label: 'Valor Atual', data: [appData.kpis.newTotal], backgroundColor: '#005A8C', barPercentage: 0.5 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { callback: value => formatCurrency(value) } } }, plugins: { legend: { position: 'top' } } }
+            });
+
+            const cashflowCtx = document.getElementById('cashflowChart').getContext('2d');
+            
+            document.getElementById('initial-balance').textContent = formatCurrency(appData.cashflow.initialBalance);
+            
+            let cumulativeBalance = appData.cashflow.initialBalance;
+            const cumulativeBalances = appData.cashflow.months.map(m => {
+                cumulativeBalance += (m.revenues.total - m.expenses.total);
+                return cumulativeBalance;
+            });
+            
+            document.getElementById('final-balance').textContent = formatCurrency(cumulativeBalances[cumulativeBalances.length - 1]);
+
+            new Chart(cashflowCtx, {
+                type: 'bar',
+                data: {
+                    labels: appData.cashflow.months.map(m => m.month),
+                    datasets: [
+                        { label: 'Receitas', data: appData.cashflow.months.map(m => m.revenues.total), backgroundColor: '#4CAF50', order: 2 },
+                        { label: 'Despesas', data: appData.cashflow.months.map(m => m.expenses.total), backgroundColor: '#f87171', order: 2 },
+                        { label: 'Saldo Acumulado', data: cumulativeBalances, type: 'line', borderColor: '#005A8C', backgroundColor: 'transparent', tension: 0.2, borderWidth: 4, pointRadius: 6, pointBackgroundColor: '#005A8C', pointHoverRadius: 8, order: 1 }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { y: { ticks: { callback: value => formatCurrency(value) } } },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                footer: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const monthData = appData.cashflow.months[index];
+                                    
+                                    let revenueDetails = monthData.revenues.details.map(d => `  + ${d.source}: ${formatCurrency(d.value)}`).join('\n');
+                                    let expenseDetails = monthData.expenses.details.map(d => `  - ${d.source}: ${formatCurrency(d.value)}`).join('\n');
+
+                                    const prevBalance = index > 0 ? cumulativeBalances[index - 1] : appData.cashflow.initialBalance;
+                                    const monthlyBalance = monthData.revenues.total - monthData.expenses.total;
+
+                                    let details = ['\n--- Detalhamento ---'];
+                                    details.push('Receitas:');
+                                    details.push(revenueDetails);
+                                    details.push('\nDespesas:');
+                                    details.push(expenseDetails);
+                                    details.push('\n--- Saldo do Mês ---');
+                                    details.push(`Saldo Anterior: ${formatCurrency(prevBalance)}`);
+                                    details.push(`Resultado do Mês: ${formatCurrency(monthlyBalance)}`);
+                                    
+                                    return details;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
