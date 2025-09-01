@@ -3,266 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convênios SEBRAE e SEPLAN</title>
+    <title>DEL Turismo - Resumo Mensal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        // Paleta de cores customizada inspirada na logo
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-blue': '#005A8C',
-                        'brand-blue-dark': '#004C75',
-                        'brand-green': '#009E4D',
-                        'brand-green-dark': '#00843d',
-                        'brand-orange': '#F5A623',
-                        'brand-background-start': '#EBF5FB', // Azul bem claro
-                        'brand-background-end': '#E6F8F0',   // Verde bem claro
-                        'brand-surface': '#FFFFFF',
-                        'brand-text-primary': '#1E293B',
-                        'brand-text-secondary': '#475569',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos globais e animações */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, theme('colors.brand-background-start'), theme('colors.brand-background-end'));
-            color: theme('colors.brand-text-primary');
-            scroll-behavior: smooth;
+            background-color: #f0f4f8;
+            color: #333;
         }
-        .nav-btn {
-            transition: all 0.3s ease-in-out;
-            border-bottom: 4px solid transparent;
-            padding: 0.75rem 1rem;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
         }
-        .nav-btn.active {
-            color: theme('colors.brand-blue');
-            border-bottom-color: theme('colors.brand-blue');
+        .section-title {
+            color: #0056b3;
+            font-size: 2.5rem;
             font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 10px;
         }
-        .nav-btn:not(.active):hover {
-            color: theme('colors.brand-blue-dark');
-            border-bottom-color: theme('colors.brand-orange');
-        }
-        .content-section {
-            display: none;
-            animation: fadeIn 0.6s ease-in-out;
-        }
-        .content-section.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #28a745;
+            border-radius: 2px;
         }
         .card {
-             background-color: theme('colors.brand-surface');
-             border-radius: 0.75rem;
-             padding: 1.5rem;
-             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-             transition: transform 0.3s ease, box-shadow 0.3s ease;
-             border-top: 4px solid;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 12px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
         }
-        .card-sebrae { border-color: theme('colors.brand-blue'); }
-        .card-seplan { border-color: theme('colors.brand-green'); }
-
-        table thead th {
-            color: theme('colors.brand-text-primary');
-            font-weight: 600;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 1.25rem 1.5rem;
             text-align: left;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .icon-box {
-            color: white;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+        th {
+            background-color: #e9f5ee;
+            color: #0056b3;
+            font-weight: 600;
+            text-transform: uppercase;
         }
-        .icon-box:hover {
-            transform: scale(1.1);
+        tbody tr:nth-child(odd) {
+            background-color: #f7fafc;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .highlight-row {
+            background-color: #cce7f0 !important;
+            font-weight: 700;
+            color: #0056b3;
+            border-top: 2px solid #0056b3;
+        }
+        .result-box {
+            background-color: #e9f5ee;
+            border: 1px solid #d4edda;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .result-box .label {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+        .result-box .value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #28a745;
+        }
+         .result-box .value.negative {
+            color: #dc3545; /* Red for negative values */
+        }
+        .logo-header {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 3rem auto;
+            display: block;
+        }
+        .footer {
+            background-color: #0056b3;
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <div class="container mx-auto p-4 md:p-8">
-        <header class="text-center mb-12">
-            <!-- A logo será exibida aqui. Certifique-se que o arquivo LogoB.png está na mesma pasta. -->
-            <img src="https://raw.githubusercontent.com/forumdoacre/FORUM/refs/heads/main/Logos/LogoB.svg" alt="Logo Fórum Empresarial" class="mx-auto h-24 w-auto mb-4">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-brand-blue">Convênios SEBRAE e SEPLAN</h1>
-            <p class="text-brand-text-secondary mt-2 text-lg">Resumo das Ações dos Convênios SEBRAE e SEPLAN</p>
-        </header>
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-700 to-green-500 py-8 px-4 text-white text-center rounded-b-3xl shadow-lg">
+        <div class="container">
+            <img src="https://raw.githubusercontent.com/forumdoacre/FORUM/refs/heads/main/Logos/LogoHB.svg" alt="Fórum Empresarial de Inovação e Desenvolvimento Logo" class="logo-header">
+            <h1 class="text-5xl font-bold mb-2">DEL TURISMO</h1>
+            <p class="text-xl font-light">Demonstrativo de Resultado Mensal</p>
+        </div>
+    </header>
 
-        <nav class="flex justify-center border-b border-slate-200 mb-10 bg-white/50 rounded-t-lg backdrop-blur-sm">
-            <div class="flex flex-wrap justify-center gap-2 md:gap-8">
-                <button id="nav-metas" class="nav-btn active text-base md:text-lg font-semibold">Convênio SEBRAE</button>
-                <button id="nav-seplan" class="nav-btn text-base md:text-lg font-semibold">Convênio SEPLAN</button>
+    <main class="container py-8">
+
+        <section id="resumo-mensal">
+            <div class="card">
+                <!-- Receitas -->
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Receitas Mensais</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Origem da Receita (Projeto)</th>
+                                <th>Valor Mensal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>AMAPÁ</td><td>R$ 37.500,00</td></tr>
+                            <tr><td>RIO BRANCO</td><td>R$ 17.000,00</td></tr>
+                            <tr><td>XAPURI</td><td>R$ 10.080,00</td></tr>
+                            <tr><td>EPITACIOLANDIA</td><td>R$ 8.400,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL DE RECEITAS</td><td>R$ 72.980,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Despesas -->
+                <h3 class="text-2xl font-bold text-gray-800 mt-10 mb-4">Despesas Mensais</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição da Despesa</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Pagamento Consultor - DEL Amapá</td><td>R$ 13.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Rio Branco</td><td>R$ 5.000,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Xapuri</td><td>R$ 4.800,00</td></tr>
+                            <tr><td>Pagamento Consultor - DEL Epitaciolândia</td><td>R$ 4.000,00</td></tr>
+                            <tr><td>Assistente Administrativa</td><td>R$ 3.500,00</td></tr>
+                            <tr><td>Diária Acre - Consultor</td><td>R$ 2.100,00</td></tr>
+                            <tr><td>Diária Acre - Motorista</td><td>R$ 475,00</td></tr>
+                            <tr><td>Passagens mensais AC e Amapá</td><td>R$ 5.500,00</td></tr>
+                            <tr><td>Combustível</td><td>R$ 1.500,00</td></tr>
+                            <tr class="highlight-row"><td>TOTAL DE DESPESAS</td><td>R$ 39.875,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Resultado -->
+                <div class="result-box">
+                    <div class="label">Resultado Mensal (Receitas - Despesas)</div>
+                    <div class="value">R$ 33.105,00</div>
+                </div>
             </div>
-        </nav>
+        </section>
 
-        <main>
-            <!-- Seção Metas SEBRAE -->
-            <section id="content-metas" class="content-section active">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-brand-blue">Metas do Convênio SEBRAE</h2>
-                </div>
-                <div class="space-y-8" id="sebrae-goals-container">
-                    <!-- Cards de metas serão inseridos dinamicamente aqui -->
-                </div>
-            </section>
+    </main>
 
-            <!-- Seção Convênio SEPLAN -->
-            <section id="content-seplan" class="content-section">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-brand-green-dark">Convênio SEPLAN: Rota de Integração Sul-Americana</h2>
-                    <p class="text-brand-text-secondary mt-2 max-w-3xl mx-auto text-lg">Plano Estratégico de Gestão e Governança para a Consolidação da Rota no trecho acreano.</p>
-                </div>
+    <!-- Footer Section -->
+    <footer class="footer mt-12">
+        <p>&copy; 2025 FÓRUM EMPRESARIAL de Inovação e Desenvolvimento. Todos os direitos reservados.</p>
+    </footer>
 
-                <div class="card card-seplan p-6 mb-10">
-                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-green-dark">Principais Componentes do Projeto</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                        <div class="flex flex-col items-center p-4">
-                            <div class="icon-box bg-brand-green flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V.5a.5.5 0 0 1 .325-.468L8 0l6.763.075zM11 15v-1h-1v1h1zm-3 0v-1h-1v1h1zm-3 0v-1h-1v1h1zm0-3h1v-1H5v1zm0-3h1V8H5v1zm0-3h1V5H5v1zm3 6h1v-1H8v1zm0-3h1V8H8v1zm0-3h1V5H8v1zm3 6h1v-1h-1v1zm0-3h1V8h-1v1zm0-3h1V5h-1v1zM4 3h1V2H4v1zm3 0h1V2H7v1zm3 0h1V2h-1v1z"/></svg></div>
-                            <h4 class="text-xl font-semibold text-brand-green-dark mb-2">Escritório de Estudos</h4>
-                            <p class="text-brand-text-secondary">Criação de um escritório para dar suporte técnico à elaboração e execução do Plano Estratégico.</p>
-                        </div>
-                        <div class="flex flex-col items-center p-4">
-                            <div class="icon-box bg-brand-green flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M7 7V1.414a1 1 0 0 1 2 0V7h5a1 1 0 0 1 .8.4l.975 1.3a.5.5 0 0 1 0 .6L14.8 10.6a1 1 0 0 1-.8.4H9v5.586a1 1 0 0 1-2 0V11H2a1 1 0 0 1-.8-.4L.225 9.3a.5.5 0 0 1 0-.6L1.2 7.4A1 1 0 0 1 2 7h5zm1 3.414V16a1 1 0 1 1-2 0v-5.586H2.586a.5.5 0 0 1-.4-.2L1.21 8.4a.5.5 0 0 1 0-.8L2.186 6.8a.5.5 0 0 1 .4-.2H7V1a1 1 0 1 1 2 0v5.586h4.414a.5.5 0 0 1 .4.2l.975 1.3a.5.5 0 0 1 0 .8l-.975 1.3a.5.5 0 0 1-.4.2H9z"/></svg></div>
-                            <h4 class="text-xl font-semibold text-brand-green-dark mb-2">Plano Estratégico</h4>
-                            <p class="text-brand-text-secondary">Elaboração de um Plano de Gestão e Governança para consolidar a Rota de Integração.</p>
-                        </div>
-                        <div class="flex flex-col items-center p-4">
-                            <div class="icon-box bg-brand-green flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 6.618V14.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V6.618a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882V2.5zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM10.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM2 14.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V6.732a.5.5 0 0 0-.16-.351l-.895-.447a1.5 1.5 0 0 1-.84-1.342V3.5a1.5 1.5 0 0 1-1.5-1.5h-1A1.5 1.5 0 0 1 9 3.5v1.118a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 11.5 6.882V14h-1V6.118a1.5 1.5 0 0 1-.83-1.342V3.5A1.5 1.5 0 0 1 8.167 2a.5.5 0 0 1 .333.12L8 2.5V5h-2V2.5a.5.5 0 0 1 .333-.48L6.833 2A1.5 1.5 0 0 1 5.5 3.5v1.276a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 3.5 6.732V14H2V6.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 4 4.882V3.5A1.5 1.5 0 0 1 2.5 2h-1A1.5 1.5 0 0 1 0 3.5v1.276a1.5 1.5 0 0 1 .83 1.342l.894.447A.5.5 0 0 0 2 6.732V14.5z"/></svg></div>
-                            <h4 class="text-xl font-semibold text-brand-green-dark mb-2">Observatório Regional</h4>
-                            <p class="text-brand-text-secondary">Criação de um portal para monitorar e divulgar dados socioeconômicos estratégicos do Acre.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-seplan p-6 mb-10">
-                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-green-dark">Justificativa e Potencial</h3>
-                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="p-4 bg-green-50 rounded-lg border-l-4 border-brand-green">
-                            <h4 class="font-semibold text-lg mb-2 text-brand-green-dark">Diagnósticos Prévios</h4>
-                            <p class="text-brand-text-secondary">Baseado em estudos do CEDEPLAR/UFMG e Fundação Dom Cabral que apontam o potencial da Rota de Integração.</p>
-                        </div>
-                        <div class="p-4 bg-green-50 rounded-lg border-l-4 border-brand-green">
-                            <h4 class="font-semibold text-lg mb-2 text-brand-green-dark">Potencial Econômico</h4>
-                            <p class="text-brand-text-secondary">A Rota pode transformar a economia acreana, conectando o estado ao mercado asiático e fortalecendo cadeias produtivas locais.</p>
-                        </div>
-                        <div class="p-4 bg-green-50 rounded-lg border-l-4 border-brand-green">
-                            <h4 class="font-semibold text-lg mb-2 text-brand-green-dark">Desafios a Superar</h4>
-                            <p class="text-brand-text-secondary">Necessidade de eliminar gargalos logísticos, atrair investimentos e criar políticas públicas eficazes para garantir a competitividade.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-seplan p-6 mb-8">
-                    <h3 class="text-2xl font-bold text-center mb-6 text-brand-green-dark">Metas e Atividades do Convênio</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead class="bg-green-100">
-                                <tr>
-                                    <th class="px-4 py-3 text-brand-green-dark">META</th>
-                                    <th class="px-4 py-3 text-brand-green-dark">ATIVIDADES</th>
-                                    <th class="px-4 py-3 text-brand-green-dark">INÍCIO</th>
-                                    <th class="px-4 py-3 text-brand-green-dark">TÉRMINO</th>
-                                </tr>
-                            </thead>
-                            <tbody id="seplan-goals-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script>
-        // Objeto central com os dados das seções
-        const appData = {
-            sebraeGoals: [
-                { id: 1, title: 'Levantamento referente ao ambiente de negócios no Acre, com a identificação dos principais desafios e oportunidades para os pequenos negócios realizado.', delivery: '01 (um) documento técnico elaborado e publicado sobre o ambiente de negócios do Acre, com o objetivo de fornecer uma análise detalhada e atualizada das condições para o desenvolvimento de empresas no estado.', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Passagens' }, { name: 'Diárias intermunicipais' }, { name: 'Materiais de consumo' }, { name: 'Serviços gráficos' } ]},
-                { id: 2, title: 'Atualização e apresentação do cadastro industrial de Rio Branco, detalhando porte, segmento, atuação, capacidade produtiva e posicionamento de mercado finalizado.', delivery: '01 (um) diagnóstico/mapeamento elaborado e aplicado com entrega de 01 (um) documento técnico com as informações tabuladas e 01 banco de dados.', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Materiais de consumo' }, { name: 'Passagens' }, { name: 'Diárias intermunicipais' } ]},
-                { id: 3, title: 'Elaboração de Estudos prospectivos das cadeias produtivas prioritárias e ambiente de negócios do Acre elaborados e disseminados.', delivery: '03 (três) estudos prospectivos elaborados e disseminados.', expenses: [ { name: 'Serviços Especializados PJ' } ]},
-                { id: 4, title: 'Elaboração da Matriz de insumo-produto para identificação dos setores-chaves da economia acreana', delivery: '01 (uma)  Matriz de insumo-produto elaborada', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Materiais de consumo' }, { name: 'Diárias intermunicipais' }, { name: 'Passagens' }, { name: 'Serviços gráficos' } ]},
-                { id: 5, title: 'Criação do Mapa de potencialidades do estado', delivery: '01 mapa de potencialidades elaborado.', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Passagens' }, { name: 'Diárias interestaduais' }, { name: 'Serviços gráficos' } ]},
-                { id: 6, title: 'Proposição de políticas públicas que incentivem o consumo/comercialização de produtos acreanos realizada', delivery: ' 02 seminários estratégicos realizados com a elaboração de um relatório técnico evidenciando as principais proposições e um plano de ação para implementação junto as câmaras técnicas', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Passagens (eventos)' }, { name: 'Diárias intermunicipais' }, { name: 'Diárias interestaduais' }, { name: 'Passagens' }, { name: 'Materiais de consumo' }, { name: 'Despesas bancárias' }, { name: 'Serviços gráficos' } ]},
-                { id: 7, title: 'Criação de campanhas de marketing para divulgar os produtos acreanos, destacando seus diferenciais, como a qualidade, a origem e a sustentabilidade', delivery: '05 (cinco) campanhas de marketing para a divulgação dos produtos acreanos através de jornais, rede sociais e eventos estratégicos criadas/lançadas', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Estagiários' }, { name: 'Divulgação e publicidade' } ]},
-                { id: 8, title: 'Reestruturação do Website do fórum empresarial,  transformando-o em uma plataforma dinâmica e às ações, artigos e documentos gerados ao longo do processo revitalizado', delivery: '01 Plataforma web dinâmica e interativa para o Fórum Empresarial implementada', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Estágio PJ' } ]},
-                { id: 9, title: 'Elaborar artigos, boletins, estudos, pesquisas, informativos e outros materiais de divulgação de alta  qualidade', delivery: '12 artigos/boletins, estudos,  pesquisas, informativos produzidos e publicados', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Material de Consumo' }, { name: 'Estágio PJ' }, { name: 'Serviços gráficos' } ]},
-                { id: 10, title: 'Realização de Eventos estratégicos para ampliar a divulgação de produtos, serviços e demais ações realizadas no âmbito das câmaras técnicas setoriais', delivery: ' 04 eventos estratégicos realizados ao longo do convênio, com pelo menos 70 participantes por evento', expenses: [ { name: 'Serviços Especializados PJ' }, { name: 'Materiais de consumo' }, { name: 'Serviços gráficos' }, { name: 'Passagens (eventos)' }, { name: 'Diárias intermunicipais' }, { name: 'Diárias interestaduais' }, { name: 'Passagens' }, { name: 'Aluguéis e encargos - PJ' } ]}
-            ],
-            seplanGoals: [
-                { meta: '1. Escritório de Estudos', activity: '1.1. Contratar Recursos Humanos', start: 'Mês 01', end: 'Mês 03' },
-                { meta: '1. Escritório de Estudos', activity: '1.2. Adquirir mobiliário e equipamentos', start: 'Mês 01', end: 'Mês 03' },
-                { meta: '1. Escritório de Estudos', activity: '1.3. Visitas de Benchmarking', start: 'Mês 02', end: 'Mês 12' },
-                { meta: '1. Escritório de Estudos', activity: '1.4. Visitas técnicas', start: 'Mês 02', end: 'Mês 20' },
-                { meta: '2. Plano Estratégico', activity: '2.1. Elaborar e Implantar o Plano Estratégico', start: 'Mês 02', end: 'Mês 12' },
-                { meta: '2. Plano Estratégico', activity: '2.2. Elaborar e Implantar o Plano de Relações Internacionais', start: 'Mês 12', end: 'Mês 15' },
-                { meta: '2. Plano Estratégico', activity: '2.3. Dois Fóruns de Desenvolvimento Regional', start: 'Mês 09', end: 'Mês 20' },
-                { meta: '3. Observatório Regional', activity: '3.1. Contratar licenças/softwares', start: 'Mês 01', end: 'Mês 03' },
-                { meta: '3. Observatório Regional', activity: '3.2. Elaborar e implantar o Observatório', start: 'Mês 04', end: 'Mês 10' },
-            ]
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- INICIALIZAÇÃO E RENDERIZAÇÃO ---
-            
-            // Renderiza os cards de metas do SEBRAE
-            const sebraeContainer = document.getElementById('sebrae-goals-container');
-            appData.sebraeGoals.forEach(goal => {
-                const expenseRows = goal.expenses.map(exp => `<tr class="border-b border-slate-200 last:border-b-0"><td class="px-4 py-2">${exp.name}</td></tr>`).join('');
-                sebraeContainer.innerHTML += `
-                    <div class="card card-sebrae p-6">
-                        <h3 class="text-xl font-semibold text-brand-blue">AÇÃO ${String(goal.id).padStart(2, '0')}: ${goal.title}</h3>
-                        <p class="mt-2 text-brand-text-secondary"><strong>ENTREGA:</strong> ${goal.delivery}</p>
-                        <div class="mt-4 overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead><tr class="bg-blue-100"><th class="px-4 py-3 text-brand-blue-dark">Especificação da Despesa</th></tr></thead>
-                                <tbody>${expenseRows}</tbody>
-                            </table>
-                        </div>
-                    </div>`;
-            });
-
-            // Renderiza a tabela de metas do SEPLAN
-            const seplanGoalsBody = document.getElementById('seplan-goals-body');
-            let lastMeta = '';
-            appData.seplanGoals.forEach(goal => {
-                const row = seplanGoalsBody.insertRow();
-                row.className = 'border-b border-slate-200 last:border-b-0';
-                let metaCell = '';
-                if (goal.meta !== lastMeta) {
-                    const rowSpan = appData.seplanGoals.filter(g => g.meta === goal.meta).length;
-                    metaCell = `<td class="px-4 py-3 align-top font-medium text-brand-text-primary" rowspan="${rowSpan}">${goal.meta}</td>`;
-                    lastMeta = goal.meta;
-                }
-                row.innerHTML = `${metaCell}<td class="px-4 py-3">${goal.activity}</td><td class="px-4 py-3">${goal.start}</td><td class="px-4 py-3">${goal.end}</td>`;
-            });
-            
-            // --- LÓGICA DE NAVEGAÇÃO ---
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const contentSections = document.querySelectorAll('.content-section');
-            const switchTab = (tabId) => {
-                navButtons.forEach(btn => btn.classList.remove('active'));
-                contentSections.forEach(section => section.classList.remove('active'));
-                document.getElementById(`nav-${tabId}`).classList.add('active');
-                document.getElementById(`content-${tabId}`).classList.add('active');
-            };
-            navButtons.forEach(button => {
-                button.addEventListener('click', (e) => switchTab(e.target.id.replace('nav-', '')));
-            });
-        });
-    </script>
 </body>
 </html>
 
